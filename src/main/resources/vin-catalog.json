@@ -1,0 +1,121 @@
+{
+  "makes": {
+    "TYT": "Toyota",
+    "VLV": "Volvo",
+    "SZK": "Suzuki",
+    "BMW": "BMW"
+  },
+
+  "models": {
+    "TYT": {
+      "CMR": {
+        "name": "Camry",
+        "generation": "XV70"
+      },
+      "RAV": {
+        "name": "RAV4",
+        "generation": "XA50"
+      }
+    },
+
+    "VLV": {
+      "XC9": {
+        "name": "XC90",
+        "generation": "II"
+      },
+      "S60": {
+        "name": "S60",
+        "generation": "II"
+      }
+    },
+
+    "SZK": {
+      "VTR": {
+        "name": "Vitara",
+        "generation": "LY"
+      }
+    },
+
+    "BMW": {
+      "3SR": {
+        "name": "3 Series",
+        "generation": "G20"
+      }
+    }
+  },
+
+  "engines": {
+    "TYT": {
+      "25": {
+        "code": "A25A-FKS",
+        "volume": 2.5,
+        "power": 181,
+        "fuelType": "GASOLINE"
+      },
+      "35": {
+        "code": "2GR-FKS",
+        "volume": 3.5,
+        "power": 249,
+        "fuelType": "GASOLINE"
+      }
+    },
+
+    "VLV": {
+      "D5": {
+        "code": "D5244T",
+        "volume": 2.4,
+        "power": 185,
+        "fuelType": "DIESEL"
+      }
+    },
+
+    "SZK": {
+      "16": {
+        "code": "M16A",
+        "volume": 1.6,
+        "power": 117,
+        "fuelType": "GASOLINE"
+      }
+    },
+
+    "BMW": {
+      "20": {
+        "code": "B48B20",
+        "volume": 2.0,
+        "power": 184,
+        "fuelType": "GASOLINE"
+      }
+    }
+  },
+
+  "transmissions": {
+    "A": "AUTOMATIC",
+    "M": "MANUAL",
+    "R": "ROBOT"
+  },
+
+  "years": {
+    "J": 2018,
+    "K": 2019,
+    "L": 2020,
+    "M": 2021,
+    "N": 2022,
+    "P": 2023,
+    "R": 2024,
+    "S": 2025,
+    "T": 2026
+  },
+
+  "drives": {
+    "F": "FWD",
+    "R": "RWD",
+    "A": "AWD"
+  },
+
+  "bodies": {
+    "S": "SEDAN",
+    "U": "SUV",
+    "H": "HATCHBACK",
+    "W": "WAGON"
+  }
+}

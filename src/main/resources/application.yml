@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: AutoPartsStore
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/autoparts_store
+    username: denis
+    password: 5252
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+
+  flyway:
+    enabled: true

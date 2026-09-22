@@ -1,0 +1,51 @@
+### Все запчасти
+GET http://localhost:8080/api/parts/6
+
+
+### Запчасть по ID
+GET http://localhost:8080/api/parts/1
+
+
+### Создать запчасть
+POST http://localhost:8080/api/parts
+Content-Type: application/json
+
+{
+  "name": "Motor Oil 10w-40 Fuchs",
+  "sku": "Fchs1040",
+  "article": "0986494127",
+  "description": "Synthetic motor oil",
+  "price": 5400.00,
+  "manufacturerId": 3,
+  "categoryId": 3
+}
+
+###
+PUT http://localhost:8080/api/parts/4
+Content-Type: application/json
+
+{
+"id": 3,
+"name": "Bosch front brake pads",
+"sku": "BOSCH-BP-001",
+"article": "0986494127",
+"description": "Updated description",
+"price": 4500.00,
+"manufacturerId": 2,
+"categoryId": 3
+}
+
+###
+DELETE http://localhost:8080/api/parts/6
+
+###
+GET http://localhost:8080/api/vin/TYTCMR25ALFS12345
+
+###
+POST http://localhost:8080/api/inventory/parts/1/receipt
+Content-Type: application/json
+
+{
+  "quantity": 5,
+  "comment": "Дополнительная поставка"
+}
