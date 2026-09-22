@@ -6,6 +6,7 @@ import java.util.List;
 
 public record VinPartsResponse(
         DecodedVin vehicle,
+        Long vehicleApplicationId,
         List<PartResponse> parts
 ) {
 }

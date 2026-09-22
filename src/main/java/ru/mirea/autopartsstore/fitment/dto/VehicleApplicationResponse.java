@@ -1,19 +1,26 @@
-package ru.mirea.autopartsstore.vin.dto;
+package ru.mirea.autopartsstore.fitment.dto;
 
 import java.math.BigDecimal;
 
-public record DecodedVin(
-        String vin,
+public record VehicleApplicationResponse(
+
+        Long id,
+
         String make,
         String model,
         String generation,
-        Integer modelYear,
+
+        Integer yearFrom,
+        Integer yearTo,
+
         String engineCode,
         BigDecimal engineVolume,
         Integer power,
+
         String fuelType,
         String transmission,
         String driveType,
         String bodyType
+
 ) {
 }

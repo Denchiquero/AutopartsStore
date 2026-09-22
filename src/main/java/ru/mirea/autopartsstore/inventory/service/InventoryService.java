@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.mirea.autopartsstore.catalog.entity.Part;
 import ru.mirea.autopartsstore.catalog.repository.PartRepository;
+import ru.mirea.autopartsstore.common.exception.InsufficientStockException;
 import ru.mirea.autopartsstore.common.exception.ResourceNotFoundException;
 import ru.mirea.autopartsstore.inventory.dto.InventoryOperationRequest;
 import ru.mirea.autopartsstore.inventory.dto.StockResponse;
@@ -14,6 +15,7 @@ import ru.mirea.autopartsstore.inventory.repository.InventoryMovementRepository;
 import ru.mirea.autopartsstore.inventory.repository.StockRepository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class InventoryService {
@@ -79,5 +81,147 @@ public class InventoryService {
                 stock.getPart().getName(),
                 stock.getQuantity()
         );
+    }
+
+    public StockResponse getStock(Long partId) {
+
+        Stock stock = stockRepository.findById(partId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Stock for part with id " + partId + " not found"
+                        )
+                );
+
+        return toResponse(stock);
+    }
+
+    @Transactional
+    public StockResponse writeOff(
+            Long partId,
+            InventoryOperationRequest request
+    ) {
+
+        Stock stock = stockRepository.findById(partId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Stock for part with id " + partId + " not found"
+                        )
+                );
+
+        if (stock.getQuantity() < request.quantity()) {
+            throw new IllegalArgumentException(
+                    "Not enough stock. Available: " + stock.getQuantity()
+            );
+        }
+
+        stock.setQuantity(
+                stock.getQuantity() - request.quantity()
+        );
+
+        stockRepository.save(stock);
+
+        InventoryMovement movement = new InventoryMovement();
+
+        movement.setPart(stock.getPart());
+        movement.setType(MovementType.WRITE_OFF);
+        movement.setQuantity(request.quantity());
+        movement.setCreatedAt(LocalDateTime.now());
+        movement.setComment(request.comment());
+
+        movementRepository.save(movement);
+
+        return toResponse(stock);
+    }
+
+    public List<InventoryMovement> getMovements(Long partId) {
+
+        if (!partRepository.existsById(partId)) {
+            throw new ResourceNotFoundException(
+                    "Part with id " + partId + " not found"
+            );
+        }
+
+        return movementRepository
+                .findByPart_IdOrderByCreatedAtDesc(partId);
+    }
+
+    @Transactional
+    public void decreaseForOrder(
+            Long partId,
+            Integer quantity,
+            Long orderId
+    ) {
+
+        Stock stock = stockRepository.findById(partId)
+                .orElseThrow(() ->
+                        new IllegalArgumentException(
+                                "Part with id " + partId + " is out of stock"
+                        )
+                );
+
+        if (stock.getQuantity() < quantity) {
+            throw new InsufficientStockException(
+                    "Not enough stock for part "
+                            + partId
+                            + ". Requested: "
+                            + quantity
+                            + ", available: "
+                            + stock.getQuantity()
+            );
+        }
+
+        stock.setQuantity(
+                stock.getQuantity() - quantity
+        );
+
+        stockRepository.save(stock);
+
+        InventoryMovement movement =
+                new InventoryMovement();
+
+        movement.setPart(stock.getPart());
+        movement.setType(MovementType.ORDER);
+        movement.setQuantity(quantity);
+        movement.setCreatedAt(LocalDateTime.now());
+        movement.setOrderId(orderId);
+        movement.setComment(
+                "Write-off for order #" + orderId
+        );
+
+        movementRepository.save(movement);
+    }
+
+    @Transactional
+    public void returnForOrder(
+            Long partId,
+            Integer quantity,
+            Long orderId
+    ) {
+
+        Stock stock = stockRepository.findById(partId)
+                .orElseThrow(() ->
+                        new IllegalStateException(
+                                "Stock for part with id " + partId + " not found"
+                        )
+                );
+
+        stock.setQuantity(
+                stock.getQuantity() + quantity
+        );
+
+        stockRepository.save(stock);
+
+        InventoryMovement movement = new InventoryMovement();
+
+        movement.setPart(stock.getPart());
+        movement.setType(MovementType.RETURN);
+        movement.setQuantity(quantity);
+        movement.setCreatedAt(LocalDateTime.now());
+        movement.setOrderId(orderId);
+        movement.setComment(
+                "Return from cancelled order #" + orderId
+        );
+
+        movementRepository.save(movement);
     }
 }

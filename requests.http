@@ -39,7 +39,7 @@ Content-Type: application/json
 DELETE http://localhost:8080/api/parts/6
 
 ###
-GET http://localhost:8080/api/vin/TYTCMR25ALFS12345
+GET http://localhost:8080/api/vin/MZDS6X16CCFS12345
 
 ###
 POST http://localhost:8080/api/inventory/parts/1/receipt
@@ -47,5 +47,196 @@ Content-Type: application/json
 
 {
   "quantity": 5,
-  "comment": "Дополнительная поставка"
+  "comment": "Поставка"
 }
+
+### Остаток
+GET http://localhost:8080/api/inventory/parts/1
+
+
+### Приход
+POST http://localhost:8080/api/inventory/parts/1/receipt
+Content-Type: application/json
+
+{
+  "quantity": 5,
+  "comment": "Поставка"
+}
+
+
+### Списание
+POST http://localhost:8080/api/inventory/parts/1/write-off
+Content-Type: application/json
+
+{
+  "quantity": 3,
+  "comment": "Поврежден товар"
+}
+
+
+### История движений
+GET http://localhost:8080/api/inventory/parts/1/movements
+
+### Создать покупателя
+POST http://localhost:8080/api/customers
+Content-Type: application/json
+
+{
+  "name": "Иван Иванов",
+  "phone": "+79991234567",
+  "email": "ivan@example.com"
+}
+
+
+### Все покупатели
+GET http://localhost:8080/api/customers
+
+
+### Один покупатель
+GET http://localhost:8080/api/customers/1
+
+
+### Изменить покупателя
+PUT http://localhost:8080/api/customers/1
+Content-Type: application/json
+
+{
+  "name": "Иван Петров",
+  "phone": "+79990000000",
+  "email": "ivan@example.com"
+}
+
+
+### Удалить покупателя
+DELETE http://localhost:8080/api/customers/1
+
+###
+
+POST http://localhost:8080/api/orders
+Content-Type: application/json
+
+{
+  "customerId": 1,
+  "items": [
+    {
+      "partId": 1,
+      "quantity": 2
+    },
+    {
+      "partId": 2,
+      "quantity": 1
+    }
+  ]
+}
+
+###
+
+GET http://localhost:8080/api/inventory/parts/2
+
+###
+
+GET http://localhost:8080/api/inventory/parts/1/movements
+
+###
+
+POST http://localhost:8080/api/orders
+Content-Type: application/json
+
+{
+  "customerId": 1,
+  "items": [
+    {
+      "partId": 1,
+      "quantity": 2
+    },
+    {
+      "partId": 2,
+      "quantity": 1
+    }
+  ]
+}
+
+###
+### Остаток до заказа
+GET http://localhost:8080/api/inventory/parts/1
+
+
+### Создание заказа
+POST http://localhost:8080/api/orders
+Content-Type: application/json
+
+{
+  "customerId": 1,
+  "items": [
+    {
+      "partId": 1,
+      "quantity": 2
+    }
+  ]
+}
+
+
+### Остаток после заказа
+GET http://localhost:8080/api/inventory/parts/1
+
+
+### Отмена
+PATCH http://localhost:8080/api/orders/3/status
+Content-Type: application/json
+
+{
+  "status": "CANCELLED"
+}
+
+
+### Остаток после отмены
+GET http://localhost:8080/api/inventory/parts/1
+
+
+### История движений
+GET http://localhost:8080/api/inventory/parts/1/movements
+
+###
+
+POST http://localhost:8080/api/vehicles
+Content-Type: application/json
+
+{
+  "make": "Toyota",
+  "model": "Camry",
+  "generation": "XV70",
+  "yearFrom": 2018,
+  "yearTo": 2023,
+  "engineCode": "2GR-FKS",
+  "engineVolume": 3.5,
+  "power": 249,
+  "fuelType": "GASOLINE",
+  "transmission": "AUTOMATIC",
+  "driveType": "FWD",
+  "bodyType": "SEDAN"
+}
+
+###
+
+### Фильтр подходит Camry 2.5
+POST http://localhost:8080/api/parts/1/fitments/1
+
+
+### Фильтр подходит Camry 3.5
+POST http://localhost:8080/api/parts/1/fitments/2
+
+###
+
+GET http://localhost:8080/api/parts/1/fitments
+
+###
+
+POST http://localhost:8080/api/parts/1/fitments/1
+
+###
+
+DELETE http://localhost:8080/api/parts/1/fitments/2
+
+###
+
+GET http://localhost:8080/api/vin/TYTCMR25ALFS12345/parts

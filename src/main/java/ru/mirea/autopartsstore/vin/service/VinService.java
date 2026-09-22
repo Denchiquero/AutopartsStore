@@ -5,6 +5,10 @@ import org.springframework.stereotype.Service;
 import ru.mirea.autopartsstore.catalog.dto.PartResponse;
 import ru.mirea.autopartsstore.catalog.repository.PartRepository;
 import ru.mirea.autopartsstore.catalog.service.PartService;
+import ru.mirea.autopartsstore.common.exception.ResourceNotFoundException;
+import ru.mirea.autopartsstore.fitment.entity.VehicleApplication;
+import ru.mirea.autopartsstore.fitment.repository.VehicleApplicationRepository;
+import ru.mirea.autopartsstore.fitment.service.FitmentService;
 import ru.mirea.autopartsstore.vin.dto.DecodedVin;
 import ru.mirea.autopartsstore.vin.dto.VinPartsResponse;
 import tools.jackson.databind.JsonNode;
@@ -20,20 +24,22 @@ import java.util.List;
 public class VinService {
 
     private final JsonNode catalog;
-    private final PartRepository partRepository;
-    private final PartService partService;
+//    private final PartRepository partRepository;
+//    private final PartService partService;
+    private final VehicleApplicationRepository vehicleRepository;
+    private final FitmentService fitmentService;
 
     public VinService(
             ObjectMapper objectMapper,
-            PartRepository partRepository,
-            PartService partService
+            VehicleApplicationRepository vehicleRepository,
+            FitmentService fitmentService
     ) throws IOException {
         this.catalog = objectMapper.readTree(
                 new ClassPathResource("vin-catalog.json").getInputStream()
         );
 
-        this.partRepository = partRepository;
-        this.partService = partService;
+        this.vehicleRepository = vehicleRepository;
+        this.fitmentService = fitmentService;
     }
 
     public DecodedVin decode(String vin) {
@@ -99,6 +105,7 @@ public class VinService {
                 vin,
                 make,
                 model.path("name").asText(),
+                model.path("generation").asText(),
                 year,
                 engine.path("code").asText(),
                 new BigDecimal(engine.path("volume").asText()),
@@ -113,39 +120,42 @@ public class VinService {
 
     public VinPartsResponse findParts(String vin) {
 
-        DecodedVin vehicle = decode(vin);
+        DecodedVin decodedVin = decode(vin);
 
-        String makeCode = vin.substring(0, 3);
-        String modelCode = vin.substring(3, 6);
-        String engineCode = vin.substring(6, 8);
+        List<VehicleApplication> matches =
+                vehicleRepository.findMatchingVehicle(
+                        decodedVin.make(),
+                        decodedVin.model(),
+                        decodedVin.generation(),
+                        decodedVin.modelYear(),
+                        decodedVin.engineCode(),
+                        decodedVin.transmission(),
+                        decodedVin.driveType(),
+                        decodedVin.bodyType()
+                );
 
-        JsonNode compatibility = catalog
-                .path("compatibility")
-                .path(makeCode)
-                .path(modelCode)
-                .path(engineCode);
-
-        if (!compatibility.isArray()) {
-            return new VinPartsResponse(
-                    vehicle,
-                    List.of()
+        if (matches.isEmpty()) {
+            throw new ResourceNotFoundException(
+                    "Vehicle configuration not found in catalog"
             );
         }
 
-        List<String> skus = new ArrayList<>();
-
-        for (JsonNode node : compatibility) {
-            skus.add(node.asText());
+        if (matches.size() > 1) {
+            throw new IllegalStateException(
+                    "More than one vehicle configuration matches VIN"
+            );
         }
 
-        List<PartResponse> parts = partRepository
-                .findBySkuIn(skus)
-                .stream()
-                .map(partService::toResponse)
-                .toList();
+        VehicleApplication vehicle = matches.getFirst();
+
+        List<PartResponse> parts =
+                fitmentService.findPartsForVehicle(
+                        vehicle.getId()
+                );
 
         return new VinPartsResponse(
-                vehicle,
+                decodedVin,
+                vehicle.getId(),
                 parts
         );
     }

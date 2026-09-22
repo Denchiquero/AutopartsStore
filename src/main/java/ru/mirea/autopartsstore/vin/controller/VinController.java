@@ -2,6 +2,7 @@ package ru.mirea.autopartsstore.vin.controller;
 
 import org.springframework.web.bind.annotation.*;
 import ru.mirea.autopartsstore.vin.dto.DecodedVin;
+import ru.mirea.autopartsstore.vin.dto.VinPartsResponse;
 import ru.mirea.autopartsstore.vin.service.VinService;
 
 
@@ -20,4 +21,13 @@ public class VinController {
     public DecodedVin decode(@PathVariable String vin) {
         return vinService.decode(vin);
     }
+
+    @GetMapping("/{vin}/parts")
+    public VinPartsResponse findParts(
+            @PathVariable String vin
+    ) {
+        return vinService.findParts(vin);
+    }
+
+
 }

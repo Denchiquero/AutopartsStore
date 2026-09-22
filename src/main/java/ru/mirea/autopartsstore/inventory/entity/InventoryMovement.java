@@ -35,4 +35,7 @@ public class InventoryMovement {
 
     @Column(length = 500)
     private String comment;
+
+    @Column(name = "order_id")
+    private Long orderId;
 }
