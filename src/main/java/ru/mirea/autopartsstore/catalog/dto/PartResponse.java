@@ -15,7 +15,7 @@ public record PartResponse(
         String manufacturerName,
 
         Long categoryId,
-        String categoryName
-
+        String categoryName,
+        Integer stockQuantity
 ) {
 }

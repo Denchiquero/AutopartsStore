@@ -5,4 +5,6 @@ import ru.mirea.autopartsstore.catalog.entity.Manufacturer;
 
 public interface ManufacturerRepository
         extends JpaRepository<Manufacturer, Long> {
+
+    boolean existsByNameIgnoreCase(String name);
 }

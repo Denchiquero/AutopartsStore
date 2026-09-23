@@ -5,4 +5,6 @@ import ru.mirea.autopartsstore.catalog.entity.PartCategory;
 
 public interface PartCategoryRepository
         extends JpaRepository<PartCategory, Long> {
+
+    boolean existsByNameIgnoreCase(String name);
 }

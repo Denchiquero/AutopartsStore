@@ -239,4 +239,4 @@ DELETE http://localhost:8080/api/parts/1/fitments/2
 
 ###
 
-GET http://localhost:8080/api/vin/TYTCMR25ALFS12345/parts
+GET http://localhost:8080/api/vin/MZDS6X16ALFS12345/parts

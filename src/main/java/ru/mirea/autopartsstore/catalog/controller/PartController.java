@@ -20,8 +20,14 @@ public class PartController {
     }
 
     @GetMapping
-    public List<PartResponse> findAll() {
-        return partService.findAll();
+    public List<PartResponse> findAll(
+            @RequestParam(required = false) Long manufacturerId,
+            @RequestParam(required = false) Long categoryId
+    ) {
+        return partService.findAll(
+                manufacturerId,
+                categoryId
+        );
     }
 
     @GetMapping("/{id}")

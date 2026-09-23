@@ -10,6 +10,8 @@ import ru.mirea.autopartsstore.catalog.dto.PartResponse;
 import ru.mirea.autopartsstore.catalog.entity.Manufacturer;
 import ru.mirea.autopartsstore.catalog.entity.PartCategory;
 import ru.mirea.autopartsstore.common.exception.ResourceNotFoundException;
+import ru.mirea.autopartsstore.inventory.entity.Stock;
+import ru.mirea.autopartsstore.inventory.repository.StockRepository;
 
 
 import java.util.List;
@@ -20,21 +22,52 @@ public class PartService {
     private final PartRepository partRepository;
     private final ManufacturerRepository manufacturerRepository;
     private final PartCategoryRepository categoryRepository;
+    private final StockRepository stockRepository;
 
     public PartService(
             PartRepository partRepository,
             ManufacturerRepository manufacturerRepository,
-            PartCategoryRepository categoryRepository
+            PartCategoryRepository categoryRepository,
+            StockRepository stockRepository
     ) {
         this.partRepository = partRepository;
         this.manufacturerRepository = manufacturerRepository;
         this.categoryRepository = categoryRepository;
+        this.stockRepository = stockRepository;
     }
 
 
-    public List<PartResponse> findAll() {
-        return partRepository.findAll()
-                .stream()
+    public List<PartResponse> findAll(
+            Long manufacturerId,
+            Long categoryId
+    ) {
+
+        List<Part> parts;
+
+        if (manufacturerId != null && categoryId != null) {
+
+            parts = partRepository
+                    .findByManufacturer_IdAndCategory_Id(
+                            manufacturerId,
+                            categoryId
+                    );
+
+        } else if (manufacturerId != null) {
+
+            parts = partRepository
+                    .findByManufacturer_Id(manufacturerId);
+
+        } else if (categoryId != null) {
+
+            parts = partRepository
+                    .findByCategory_Id(categoryId);
+
+        } else {
+
+            parts = partRepository.findAll();
+        }
+
+        return parts.stream()
                 .map(this::toResponse)
                 .toList();
     }
@@ -93,6 +126,11 @@ public class PartService {
 
     public PartResponse toResponse(Part part) {
 
+        Integer stockQuantity = stockRepository
+                .findById(part.getId())
+                .map(Stock::getQuantity)
+                .orElse(0);
+
         return new PartResponse(
                 part.getId(),
                 part.getName(),
@@ -105,7 +143,8 @@ public class PartService {
                 part.getManufacturer().getName(),
 
                 part.getCategory().getId(),
-                part.getCategory().getName()
+                part.getCategory().getName(),
+                stockQuantity
         );
     }
 
