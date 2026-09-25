@@ -124,18 +124,20 @@ public class FitmentService {
 
         if (!vehicleRepository.existsById(vehicleId)) {
             throw new ResourceNotFoundException(
-                    "Vehicle application with id "
+                    "Vehicle with id "
                             + vehicleId
                             + " not found"
             );
         }
 
-        return fitmentRepository
-                .findByVehicleApplication_Id(vehicleId)
-                .stream()
-                .map(PartFitment::getPart)
-                .map(partService::toResponse)
-                .toList();
+        List<Part> parts =
+                fitmentRepository
+                        .findByVehicleApplication_Id(vehicleId)
+                        .stream()
+                        .map(PartFitment::getPart)
+                        .toList();
+
+        return partService.toResponses(parts);
     }
 
     private VehicleApplicationResponse toVehicleResponse(

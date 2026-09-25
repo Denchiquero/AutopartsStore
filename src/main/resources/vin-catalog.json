@@ -1,23 +1,808 @@
 {
   "makes": {
-    "TYT": "Toyota",
-    "VLV": "Volvo",
-    "SZK": "Suzuki",
-    "BMW": "BMW",
-    "SKD": "Skoda",
     "AUD": "Audi",
-    "VWN": "Volkswagen",
-    "MZD": "Mazda",
-    "LNF": "Infiniti",
+    "BMW": "BMW",
+    "CHT": "Chevrolet",
+    "CTN": "Citroen",
     "DEW": "Daewoo",
-    "MDS": "Mercedes-Benz",
-    "RNT": "Renault",
-    "CRN": "Citroen",
+    "FRD": "Ford",
+    "HND": "Honda",
     "HUY": "Hyundai",
-    "HND": "Honda"
+    "LNF": "Infiniti",
+    "KIA": "Kia",
+    "MZD": "Mazda",
+    "MDS": "Mercedes-Benz",
+    "MSB": "Mitsubishi",
+    "NSN": "Nissan",
+    "OPL": "Opel",
+    "PGT": "Peugeot",
+    "RNT": "Renault",
+    "SKD": "Skoda",
+    "SZK": "Suzuki",
+    "TYT": "Toyota",
+    "VWN": "Volkswagen",
+    "VLV": "Volvo",
+    "LAD": "LADA"
   },
-
   "models": {
+    "AUD": {
+      "A3S": {
+        "name": "A3",
+        "generation": "8Y"
+      },
+      "A3L": {
+        "name": "A3 Long",
+        "generation": "8Y"
+      },
+      "A4S": {
+        "name": "A4",
+        "generation": "B9"
+      },
+      "A6S": {
+        "name": "A6",
+        "generation": "C9"
+      },
+      "A8L": {
+        "name": "A8 Long",
+        "generation": "D5"
+      },
+      "Q3V": {
+        "name": "Q3",
+        "generation": "III"
+      },
+      "Q5V": {
+        "name": "Q5",
+        "generation": "III"
+      },
+      "Q7V": {
+        "name": "Q5",
+        "generation": "G8"
+      },
+      "Q8V": {
+        "name": "Q8",
+        "generation": "I"
+      },
+      "TTC": {
+        "name": "TT",
+        "generation": "8S"
+      }
+    },
+    "BMW": {
+      "TSR": {
+        "name": "3 Series",
+        "generation": "G20"
+      },
+      "FSR": {
+        "name": "5 Series",
+        "generation": "G30"
+      },
+      "SSR": {
+        "name": "7 Series",
+        "generation": "G11"
+      },
+      "XON": {
+        "name": "X1",
+        "generation": "F48"
+      },
+      "XTR": {
+        "name": "X3",
+        "generation": "G01"
+      },
+      "XFV": {
+        "name": "X5",
+        "generation": "G05"
+      },
+      "XSX": {
+        "name": "X6",
+        "generation": "G06"
+      },
+      "XSV": {
+        "name": "X7",
+        "generation": "G07"
+      },
+      "MTH": {
+        "name": "M3",
+        "generation": "G80"
+      },
+      "MFV": {
+        "name": "M5",
+        "generation": "F90"
+      }
+    },
+    "CHT": {
+      "AVE": {
+        "name": "Aveo",
+        "generation": "T300"
+      },
+      "CRZ": {
+        "name": "Cruze",
+        "generation": "J300"
+      },
+      "LAC": {
+        "name": "Lacetti",
+        "generation": "J200"
+      },
+      "COB": {
+        "name": "Cobalt",
+        "generation": "II"
+      },
+      "CAP": {
+        "name": "Captiva",
+        "generation": "I"
+      },
+      "TAH": {
+        "name": "Tahoe",
+        "generation": "IV"
+      },
+      "TRB": {
+        "name": "Trailblazer",
+        "generation": "II"
+      },
+      "NIV": {
+        "name": "Niva",
+        "generation": "I"
+      },
+      "MAL": {
+        "name": "Malibu",
+        "generation": "IX"
+      },
+      "SPK": {
+        "name": "Spark",
+        "generation": "III"
+      }
+    },
+    "CTN": {
+      "CTR": {
+        "name": "C3",
+        "generation": "III"
+      },
+      "CFR": {
+        "name": "C4",
+        "generation": "II"
+      },
+      "CFV": {
+        "name": "C5",
+        "generation": "II"
+      },
+      "ELY": {
+        "name": "C-Elysee",
+        "generation": "I"
+      },
+      "BER": {
+        "name": "Berlingo",
+        "generation": "II"
+      },
+      "PIC": {
+        "name": "C4 Picasso",
+        "generation": "II"
+      },
+      "CAR": {
+        "name": "C5 Aircross",
+        "generation": "I"
+      },
+      "AIR": {
+        "name": "C3 Aircross",
+        "generation": "I"
+      },
+      "JMP": {
+        "name": "Jumpy",
+        "generation": "III"
+      },
+      "SPT": {
+        "name": "SpaceTourer",
+        "generation": "I"
+      }
+    },
+    "DEW": {
+      "MAT": {
+        "name": "Matiz",
+        "generation": "M150"
+      },
+      "NEX": {
+        "name": "Nexia",
+        "generation": "N150"
+      },
+      "GEN": {
+        "name": "Gentra",
+        "generation": "II"
+      },
+      "LAN": {
+        "name": "Lanos",
+        "generation": "T150"
+      },
+      "NUB": {
+        "name": "Nubira",
+        "generation": "J200"
+      },
+      "LEG": {
+        "name": "Leganza",
+        "generation": "V100"
+      },
+      "ESP": {
+        "name": "Espero",
+        "generation": "KLEJ"
+      }
+    },
+    "FRD": {
+      "FOC": {
+        "name": "Focus",
+        "generation": "III"
+      },
+      "MON": {
+        "name": "Mondeo",
+        "generation": "V"
+      },
+      "FIE": {
+        "name": "Fiesta",
+        "generation": "VI"
+      },
+      "KUG": {
+        "name": "Kuga",
+        "generation": "II"
+      },
+      "EXP": {
+        "name": "Explorer",
+        "generation": "V"
+      },
+      "TRN": {
+        "name": "Transit",
+        "generation": "VII"
+      },
+      "ECO": {
+        "name": "EcoSport",
+        "generation": "I"
+      },
+      "FUS": {
+        "name": "Fusion",
+        "generation": "I"
+      },
+      "RNG": {
+        "name": "Ranger",
+        "generation": "T6"
+      },
+      "GAL": {
+        "name": "Galaxy",
+        "generation": "III"
+      }
+    },
+    "HND": {
+      "CIV": {
+        "name": "Civic",
+        "generation": "X"
+      },
+      "ACC": {
+        "name": "Accord",
+        "generation": "IX"
+      },
+      "CRV": {
+        "name": "CR-V",
+        "generation": "V"
+      },
+      "HRV": {
+        "name": "HR-V",
+        "generation": "II"
+      },
+      "PIL": {
+        "name": "Pilot",
+        "generation": "III"
+      },
+      "FIT": {
+        "name": "Fit",
+        "generation": "III"
+      },
+      "JAZ": {
+        "name": "Jazz",
+        "generation": "III"
+      },
+      "ODY": {
+        "name": "Odyssey",
+        "generation": "V"
+      },
+      "CRO": {
+        "name": "Crosstour",
+        "generation": "I"
+      },
+      "CTY": {
+        "name": "City",
+        "generation": "VII"
+      }
+    },
+    "HUY": {
+      "SOL": {
+        "name": "Solaris",
+        "generation": "II"
+      },
+      "ELA": {
+        "name": "Elantra",
+        "generation": "VI"
+      },
+      "SON": {
+        "name": "Sonata",
+        "generation": "VIII"
+      },
+      "TUC": {
+        "name": "Tucson",
+        "generation": "III"
+      },
+      "SFE": {
+        "name": "Santa Fe",
+        "generation": "IV"
+      },
+      "CRE": {
+        "name": "Creta",
+        "generation": "I"
+      },
+      "THR": {
+        "name": "i30",
+        "generation": "III"
+      },
+      "PAL": {
+        "name": "Palisade",
+        "generation": "I"
+      },
+      "ACE": {
+        "name": "Accent",
+        "generation": "V"
+      },
+      "GET": {
+        "name": "Getz",
+        "generation": "I"
+      }
+    },
+    "LNF": {
+      "QFT": {
+        "name": "Q50",
+        "generation": "V37"
+      },
+      "QSV": {
+        "name": "Q70",
+        "generation": "Y51"
+      },
+      "QXF": {
+        "name": "QX50",
+        "generation": "J55"
+      },
+      "QXS": {
+        "name": "QX60",
+        "generation": "L50"
+      },
+      "QXV": {
+        "name": "QX70",
+        "generation": "S51"
+      },
+      "QXE": {
+        "name": "QX80",
+        "generation": "Z62"
+      },
+      "FXX": {
+        "name": "FX",
+        "generation": "S51"
+      },
+      "GTH": {
+        "name": "G35",
+        "generation": "V36"
+      }
+    },
+    "KIA": {
+      "RIO": {
+        "name": "Rio",
+        "generation": "IV"
+      },
+      "CEE": {
+        "name": "Ceed",
+        "generation": "III"
+      },
+      "CER": {
+        "name": "Cerato",
+        "generation": "IV"
+      },
+      "KFV": {
+        "name": "K5",
+        "generation": "III"
+      },
+      "SPG": {
+        "name": "Sportage",
+        "generation": "IV"
+      },
+      "SOR": {
+        "name": "Sorento",
+        "generation": "III"
+      },
+      "SOU": {
+        "name": "Soul",
+        "generation": "III"
+      },
+      "SEL": {
+        "name": "Seltos",
+        "generation": "I"
+      },
+      "CAR": {
+        "name": "Carnival",
+        "generation": "IV"
+      },
+      "PIC": {
+        "name": "Picanto",
+        "generation": "III"
+      }
+    },
+    "MZD": {
+      "MTH": {
+        "name": "3",
+        "generation": "BP"
+      },
+      "MSX": {
+        "name": "6",
+        "generation": "GJ"
+      },
+      "CXF": {
+        "name": "CX-5",
+        "generation": "KF"
+      },
+      "CXS": {
+        "name": "CX-7",
+        "generation": "ER"
+      },
+      "CXN": {
+        "name": "CX-9",
+        "generation": "TC"
+      },
+      "CXT": {
+        "name": "CX-30",
+        "generation": "DM"
+      },
+      "MXF": {
+        "name": "MX-5",
+        "generation": "ND"
+      },
+      "TRB": {
+        "name": "Tribute",
+        "generation": "EP"
+      },
+      "PRE": {
+        "name": "Premacy",
+        "generation": "CR"
+      },
+      "BTF": {
+        "name": "BT-50",
+        "generation": "II"
+      }
+    },
+    "MDS": {
+      "CLS": {
+        "name": "C-Class",
+        "generation": "W205"
+      },
+      "ELS": {
+        "name": "E-Class",
+        "generation": "W213"
+      },
+      "SLS": {
+        "name": "S-Class",
+        "generation": "W222"
+      },
+      "ALS": {
+        "name": "A-Class",
+        "generation": "W177"
+      },
+      "GLA": {
+        "name": "GLA",
+        "generation": "H247"
+      },
+      "GLC": {
+        "name": "GLC",
+        "generation": "X253"
+      },
+      "GLE": {
+        "name": "GLE",
+        "generation": "W167"
+      },
+      "GLS": {
+        "name": "GLS",
+        "generation": "X167"
+      },
+      "GCL": {
+        "name": "G-Class",
+        "generation": "W463"
+      },
+      "VCL": {
+        "name": "V-Class",
+        "generation": "W447"
+      }
+    },
+    "MSB": {
+      "LAN": {
+        "name": "Lancer",
+        "generation": "X"
+      },
+      "OUT": {
+        "name": "Outlander",
+        "generation": "III"
+      },
+      "PAJ": {
+        "name": "Pajero",
+        "generation": "IV"
+      },
+      "ASX": {
+        "name": "ASX",
+        "generation": "I"
+      },
+      "ECL": {
+        "name": "Eclipse Cross",
+        "generation": "I"
+      },
+      "COL": {
+        "name": "Colt",
+        "generation": "VI"
+      },
+      "GAL": {
+        "name": "Galant",
+        "generation": "IX"
+      },
+      "LTT": {
+        "name": "L200",
+        "generation": "V"
+      },
+      "PJS": {
+        "name": "Pajero Sport",
+        "generation": "III"
+      },
+      "GRA": {
+        "name": "Grandis",
+        "generation": "I"
+      }
+    },
+    "NSN": {
+      "QAS": {
+        "name": "Qashqai",
+        "generation": "J11"
+      },
+      "XTR": {
+        "name": "X-Trail",
+        "generation": "T32"
+      },
+      "ALM": {
+        "name": "Almera",
+        "generation": "G15"
+      },
+      "TEA": {
+        "name": "Teana",
+        "generation": "L33"
+      },
+      "MUR": {
+        "name": "Murano",
+        "generation": "Z52"
+      },
+      "JUK": {
+        "name": "Juke",
+        "generation": "F15"
+      },
+      "PAT": {
+        "name": "Patrol",
+        "generation": "Y62"
+      },
+      "PTH": {
+        "name": "Pathfinder",
+        "generation": "R52"
+      },
+      "NOT": {
+        "name": "Note",
+        "generation": "E12"
+      },
+      "TER": {
+        "name": "Terrano",
+        "generation": "III"
+      }
+    },
+    "OPL": {
+      "AST": {
+        "name": "Astra",
+        "generation": "J"
+      },
+      "COR": {
+        "name": "Corsa",
+        "generation": "E"
+      },
+      "INS": {
+        "name": "Insignia",
+        "generation": "A"
+      },
+      "ZAF": {
+        "name": "Zafira",
+        "generation": "C"
+      },
+      "MOK": {
+        "name": "Mokka",
+        "generation": "I"
+      },
+      "VEC": {
+        "name": "Vectra",
+        "generation": "C"
+      },
+      "MER": {
+        "name": "Meriva",
+        "generation": "B"
+      },
+      "ANT": {
+        "name": "Antara",
+        "generation": "I"
+      },
+      "OME": {
+        "name": "Omega",
+        "generation": "B"
+      },
+      "CRS": {
+        "name": "Crossland",
+        "generation": "I"
+      }
+    },
+    "PGT": {
+      "TSX": {
+        "name": "206",
+        "generation": "I"
+      },
+      "TSV": {
+        "name": "207",
+        "generation": "I"
+      },
+      "THE": {
+        "name": "308",
+        "generation": "II"
+      },
+      "FOE": {
+        "name": "408",
+        "generation": "I"
+      },
+      "FVE": {
+        "name": "508",
+        "generation": "II"
+      },
+      "TWE": {
+        "name": "2008",
+        "generation": "I"
+      },
+      "TRE": {
+        "name": "3008",
+        "generation": "II"
+      },
+      "FZE": {
+        "name": "5008",
+        "generation": "II"
+      },
+      "PAR": {
+        "name": "Partner",
+        "generation": "II"
+      },
+      "TRA": {
+        "name": "Traveller",
+        "generation": "I"
+      }
+    },
+    "RNT": {
+      "LOG": {
+        "name": "Logan",
+        "generation": "II"
+      },
+      "SAN": {
+        "name": "Sandero",
+        "generation": "II"
+      },
+      "DUS": {
+        "name": "Duster",
+        "generation": "I"
+      },
+      "KAP": {
+        "name": "Kaptur",
+        "generation": "I"
+      },
+      "MEG": {
+        "name": "Megane",
+        "generation": "III"
+      },
+      "FLU": {
+        "name": "Fluence",
+        "generation": "I"
+      },
+      "CLI": {
+        "name": "Clio",
+        "generation": "IV"
+      },
+      "ARK": {
+        "name": "Arkana",
+        "generation": "I"
+      },
+      "KOL": {
+        "name": "Koleos",
+        "generation": "II"
+      },
+      "SYM": {
+        "name": "Symbol",
+        "generation": "II"
+      }
+    },
+    "SKD": {
+      "OCT": {
+        "name": "Octavia",
+        "generation": "III"
+      },
+      "RAP": {
+        "name": "Rapid",
+        "generation": "I"
+      },
+      "SUP": {
+        "name": "Superb",
+        "generation": "III"
+      },
+      "KOD": {
+        "name": "Kodiaq",
+        "generation": "I"
+      },
+      "KAR": {
+        "name": "Karoq",
+        "generation": "I"
+      },
+      "FAB": {
+        "name": "Fabia",
+        "generation": "III"
+      },
+      "YET": {
+        "name": "Yeti",
+        "generation": "I"
+      },
+      "SCA": {
+        "name": "Scala",
+        "generation": "I"
+      },
+      "KAM": {
+        "name": "Kamiq",
+        "generation": "I"
+      },
+      "ROO": {
+        "name": "Roomster",
+        "generation": "I"
+      }
+    },
+    "SZK": {
+      "VIT": {
+        "name": "Vitara",
+        "generation": "LY"
+      },
+      "SXF": {
+        "name": "SX4",
+        "generation": "II"
+      },
+      "GVT": {
+        "name": "Grand Vitara",
+        "generation": "III"
+      },
+      "JIM": {
+        "name": "Jimny",
+        "generation": "IV"
+      },
+      "SWF": {
+        "name": "Swift",
+        "generation": "V"
+      },
+      "IGN": {
+        "name": "Ignis",
+        "generation": "III"
+      },
+      "BAL": {
+        "name": "Baleno",
+        "generation": "II"
+      },
+      "SCR": {
+        "name": "S-Cross",
+        "generation": "I"
+      },
+      "ALT": {
+        "name": "Alto",
+        "generation": "VIII"
+      },
+      "SPL": {
+        "name": "Splash",
+        "generation": "I"
+      }
+    },
     "TYT": {
       "CMR": {
         "name": "Camry",
@@ -26,49 +811,800 @@
       "RAV": {
         "name": "RAV4",
         "generation": "XA50"
+      },
+      "COR": {
+        "name": "Corolla",
+        "generation": "E210"
+      },
+      "LCR": {
+        "name": "Land Cruiser",
+        "generation": "J200"
+      },
+      "PRD": {
+        "name": "Land Cruiser Prado",
+        "generation": "J150"
+      },
+      "HGH": {
+        "name": "Highlander",
+        "generation": "XU70"
+      },
+      "FOR": {
+        "name": "Fortuner",
+        "generation": "II"
+      },
+      "AVE": {
+        "name": "Avensis",
+        "generation": "T27"
+      },
+      "PRI": {
+        "name": "Prius",
+        "generation": "XW50"
+      },
+      "CHR": {
+        "name": "C-HR",
+        "generation": "I"
       }
     },
-
+    "VWN": {
+      "POL": {
+        "name": "Polo",
+        "generation": "VI"
+      },
+      "PAS": {
+        "name": "Passat",
+        "generation": "B8"
+      },
+      "TIG": {
+        "name": "Tiguan",
+        "generation": "II"
+      },
+      "TOU": {
+        "name": "Touareg",
+        "generation": "III"
+      },
+      "GOL": {
+        "name": "Golf",
+        "generation": "VII"
+      },
+      "JET": {
+        "name": "Jetta",
+        "generation": "VII"
+      },
+      "TRP": {
+        "name": "Transporter",
+        "generation": "T6"
+      },
+      "TER": {
+        "name": "Teramont",
+        "generation": "I"
+      },
+      "CAD": {
+        "name": "Caddy",
+        "generation": "IV"
+      },
+      "ART": {
+        "name": "Arteon",
+        "generation": "I"
+      }
+    },
     "VLV": {
-      "XC9": {
+      "XCN": {
         "name": "XC90",
         "generation": "II"
       },
-      "S60": {
+      "XCS": {
+        "name": "XC60",
+        "generation": "II"
+      },
+      "XCF": {
+        "name": "XC40",
+        "generation": "I"
+      },
+      "SXS": {
         "name": "S60",
         "generation": "II"
+      },
+      "SET": {
+        "name": "S80",
+        "generation": "II"
+      },
+      "SNZ": {
+        "name": "S90",
+        "generation": "II"
+      },
+      "VFR": {
+        "name": "V40",
+        "generation": "II"
+      },
+      "VSX": {
+        "name": "V60",
+        "generation": "II"
+      },
+      "VNZ": {
+        "name": "V90",
+        "generation": "II"
+      },
+      "CTH": {
+        "name": "C30",
+        "generation": "I"
       }
     },
-
-    "SZK": {
-      "VTR": {
-        "name": "Vitara",
-        "generation": "LY"
-      }
-    },
-
-    "MZD": {
-      "S6X": {
-        "name": "6",
-        "generation": "JH"
-      }
-    },
-
-    "BMW": {
-      "3SR": {
-        "name": "3 Series",
-        "generation": "G20"
+    "LAD": {
+      "GRA": {
+        "name": "Granta",
+        "generation": "I"
+      },
+      "VES": {
+        "name": "Vesta",
+        "generation": "I"
+      },
+      "NVL": {
+        "name": "Niva Legend",
+        "generation": "I"
+      },
+      "NVT": {
+        "name": "Niva Travel",
+        "generation": "I"
+      },
+      "LAR": {
+        "name": "Largus",
+        "generation": "I"
+      },
+      "KAL": {
+        "name": "Kalina",
+        "generation": "II"
+      },
+      "PRI": {
+        "name": "Priora",
+        "generation": "I"
+      },
+      "XRY": {
+        "name": "XRAY",
+        "generation": "I"
+      },
+      "SEV": {
+        "name": "2107",
+        "generation": "I"
+      },
+      "NIN": {
+        "name": "2109",
+        "generation": "I"
       }
     }
   },
-
   "engines": {
+    "AUD": {
+      "14": {
+        "code": "CZEA",
+        "volume": 1.4,
+        "power": 150,
+        "fuelType": "GASOLINE"
+      },
+      "18": {
+        "code": "CJSA",
+        "volume": 1.8,
+        "power": 180,
+        "fuelType": "GASOLINE"
+      },
+      "20": {
+        "code": "EA888",
+        "volume": 2.0,
+        "power": 190,
+        "fuelType": "GASOLINE"
+      },
+      "2D": {
+        "code": "EA288",
+        "volume": 2.0,
+        "power": 150,
+        "fuelType": "DIESEL"
+      },
+      "30": {
+        "code": "EA839",
+        "volume": 3.0,
+        "power": 340,
+        "fuelType": "GASOLINE"
+      }
+    },
+    "BMW": {
+      "16": {
+        "code": "N13B16",
+        "volume": 1.6,
+        "power": 136,
+        "fuelType": "GASOLINE"
+      },
+      "20": {
+        "code": "B48B20",
+        "volume": 2.0,
+        "power": 184,
+        "fuelType": "GASOLINE"
+      },
+      "2D": {
+        "code": "B47D20",
+        "volume": 2.0,
+        "power": 190,
+        "fuelType": "DIESEL"
+      },
+      "30": {
+        "code": "B58B30",
+        "volume": 3.0,
+        "power": 340,
+        "fuelType": "GASOLINE"
+      },
+      "3D": {
+        "code": "B57D30",
+        "volume": 3.0,
+        "power": 249,
+        "fuelType": "DIESEL"
+      }
+    },
+    "CHT": {
+      "12": {
+        "code": "B12D1",
+        "volume": 1.2,
+        "power": 84,
+        "fuelType": "GASOLINE"
+      },
+      "14": {
+        "code": "A14NET",
+        "volume": 1.4,
+        "power": 140,
+        "fuelType": "GASOLINE"
+      },
+      "16": {
+        "code": "F16D4",
+        "volume": 1.6,
+        "power": 109,
+        "fuelType": "GASOLINE"
+      },
+      "18": {
+        "code": "F18D4",
+        "volume": 1.8,
+        "power": 141,
+        "fuelType": "GASOLINE"
+      },
+      "53": {
+        "code": "L83",
+        "volume": 5.3,
+        "power": 355,
+        "fuelType": "GASOLINE"
+      }
+    },
+    "CTN": {
+      "12": {
+        "code": "EB2DT",
+        "volume": 1.2,
+        "power": 110,
+        "fuelType": "GASOLINE"
+      },
+      "16": {
+        "code": "EP6",
+        "volume": 1.6,
+        "power": 120,
+        "fuelType": "GASOLINE"
+      },
+      "1T": {
+        "code": "EP6DT",
+        "volume": 1.6,
+        "power": 150,
+        "fuelType": "GASOLINE"
+      },
+      "1D": {
+        "code": "DV6",
+        "volume": 1.6,
+        "power": 115,
+        "fuelType": "DIESEL"
+      },
+      "2D": {
+        "code": "DW10",
+        "volume": 2.0,
+        "power": 150,
+        "fuelType": "DIESEL"
+      }
+    },
+    "DEW": {
+      "08": {
+        "code": "F8CV",
+        "volume": 0.8,
+        "power": 52,
+        "fuelType": "GASOLINE"
+      },
+      "10": {
+        "code": "B10S1",
+        "volume": 1.0,
+        "power": 64,
+        "fuelType": "GASOLINE"
+      },
+      "15": {
+        "code": "A15SMS",
+        "volume": 1.5,
+        "power": 86,
+        "fuelType": "GASOLINE"
+      },
+      "16": {
+        "code": "F16D3",
+        "volume": 1.6,
+        "power": 109,
+        "fuelType": "GASOLINE"
+      },
+      "20": {
+        "code": "X20SED",
+        "volume": 2.0,
+        "power": 133,
+        "fuelType": "GASOLINE"
+      }
+    },
+    "FRD": {
+      "10": {
+        "code": "M1DA",
+        "volume": 1.0,
+        "power": 125,
+        "fuelType": "GASOLINE"
+      },
+      "16": {
+        "code": "PNDA",
+        "volume": 1.6,
+        "power": 125,
+        "fuelType": "GASOLINE"
+      },
+      "20": {
+        "code": "TNBB",
+        "volume": 2.0,
+        "power": 200,
+        "fuelType": "GASOLINE"
+      },
+      "2D": {
+        "code": "TDCI20",
+        "volume": 2.0,
+        "power": 150,
+        "fuelType": "DIESEL"
+      },
+      "35": {
+        "code": "ECO35",
+        "volume": 3.5,
+        "power": 249,
+        "fuelType": "GASOLINE"
+      }
+    },
+    "HND": {
+      "15": {
+        "code": "L15B",
+        "volume": 1.5,
+        "power": 130,
+        "fuelType": "GASOLINE"
+      },
+      "18": {
+        "code": "R18A",
+        "volume": 1.8,
+        "power": 140,
+        "fuelType": "GASOLINE"
+      },
+      "20": {
+        "code": "K20A",
+        "volume": 2.0,
+        "power": 155,
+        "fuelType": "GASOLINE"
+      },
+      "24": {
+        "code": "K24A",
+        "volume": 2.4,
+        "power": 201,
+        "fuelType": "GASOLINE"
+      },
+      "35": {
+        "code": "J35A",
+        "volume": 3.5,
+        "power": 249,
+        "fuelType": "GASOLINE"
+      }
+    },
+    "HUY": {
+      "14": {
+        "code": "G4FA",
+        "volume": 1.4,
+        "power": 107,
+        "fuelType": "GASOLINE"
+      },
+      "16": {
+        "code": "G4FC",
+        "volume": 1.6,
+        "power": 123,
+        "fuelType": "GASOLINE"
+      },
+      "20": {
+        "code": "G4NA",
+        "volume": 2.0,
+        "power": 150,
+        "fuelType": "GASOLINE"
+      },
+      "24": {
+        "code": "G4KE",
+        "volume": 2.4,
+        "power": 188,
+        "fuelType": "GASOLINE"
+      },
+      "2D": {
+        "code": "D4HA",
+        "volume": 2.0,
+        "power": 185,
+        "fuelType": "DIESEL"
+      }
+    },
+    "LNF": {
+      "20": {
+        "code": "M274",
+        "volume": 2.0,
+        "power": 211,
+        "fuelType": "GASOLINE"
+      },
+      "25": {
+        "code": "VQ25HR",
+        "volume": 2.5,
+        "power": 222,
+        "fuelType": "GASOLINE"
+      },
+      "30": {
+        "code": "VR30DDTT",
+        "volume": 3.0,
+        "power": 300,
+        "fuelType": "GASOLINE"
+      },
+      "35": {
+        "code": "VQ35HR",
+        "volume": 3.5,
+        "power": 306,
+        "fuelType": "GASOLINE"
+      },
+      "37": {
+        "code": "VQ37VHR",
+        "volume": 3.7,
+        "power": 333,
+        "fuelType": "GASOLINE"
+      }
+    },
+    "KIA": {
+      "14": {
+        "code": "G4LC",
+        "volume": 1.4,
+        "power": 100,
+        "fuelType": "GASOLINE"
+      },
+      "16": {
+        "code": "G4FG",
+        "volume": 1.6,
+        "power": 123,
+        "fuelType": "GASOLINE"
+      },
+      "20": {
+        "code": "G4NA",
+        "volume": 2.0,
+        "power": 150,
+        "fuelType": "GASOLINE"
+      },
+      "24": {
+        "code": "G4KE",
+        "volume": 2.4,
+        "power": 188,
+        "fuelType": "GASOLINE"
+      },
+      "2D": {
+        "code": "D4HA",
+        "volume": 2.0,
+        "power": 185,
+        "fuelType": "DIESEL"
+      }
+    },
+    "MZD": {
+      "15": {
+        "code": "P5-VPS",
+        "volume": 1.5,
+        "power": 120,
+        "fuelType": "GASOLINE"
+      },
+      "20": {
+        "code": "PE-VPS",
+        "volume": 2.0,
+        "power": 150,
+        "fuelType": "GASOLINE"
+      },
+      "25": {
+        "code": "PY-VPS",
+        "volume": 2.5,
+        "power": 192,
+        "fuelType": "GASOLINE"
+      },
+      "22": {
+        "code": "SH-VPTS",
+        "volume": 2.2,
+        "power": 175,
+        "fuelType": "DIESEL"
+      },
+      "23": {
+        "code": "L3-VDT",
+        "volume": 2.3,
+        "power": 238,
+        "fuelType": "GASOLINE"
+      }
+    },
+    "MDS": {
+      "16": {
+        "code": "M274",
+        "volume": 1.6,
+        "power": 156,
+        "fuelType": "GASOLINE"
+      },
+      "20": {
+        "code": "M264",
+        "volume": 2.0,
+        "power": 197,
+        "fuelType": "GASOLINE"
+      },
+      "2D": {
+        "code": "OM654",
+        "volume": 2.0,
+        "power": 194,
+        "fuelType": "DIESEL"
+      },
+      "30": {
+        "code": "M256",
+        "volume": 3.0,
+        "power": 367,
+        "fuelType": "GASOLINE"
+      },
+      "3D": {
+        "code": "OM656",
+        "volume": 3.0,
+        "power": 249,
+        "fuelType": "DIESEL"
+      }
+    },
+    "MSB": {
+      "16": {
+        "code": "4A92",
+        "volume": 1.6,
+        "power": 117,
+        "fuelType": "GASOLINE"
+      },
+      "18": {
+        "code": "4B10",
+        "volume": 1.8,
+        "power": 143,
+        "fuelType": "GASOLINE"
+      },
+      "20": {
+        "code": "4B11",
+        "volume": 2.0,
+        "power": 146,
+        "fuelType": "GASOLINE"
+      },
+      "24": {
+        "code": "4B12",
+        "volume": 2.4,
+        "power": 167,
+        "fuelType": "GASOLINE"
+      },
+      "30": {
+        "code": "6B31",
+        "volume": 3.0,
+        "power": 227,
+        "fuelType": "GASOLINE"
+      }
+    },
+    "NSN": {
+      "16": {
+        "code": "HR16DE",
+        "volume": 1.6,
+        "power": 117,
+        "fuelType": "GASOLINE"
+      },
+      "20": {
+        "code": "MR20DE",
+        "volume": 2.0,
+        "power": 144,
+        "fuelType": "GASOLINE"
+      },
+      "25": {
+        "code": "QR25DE",
+        "volume": 2.5,
+        "power": 171,
+        "fuelType": "GASOLINE"
+      },
+      "35": {
+        "code": "VQ35DE",
+        "volume": 3.5,
+        "power": 249,
+        "fuelType": "GASOLINE"
+      },
+      "2D": {
+        "code": "M9R",
+        "volume": 2.0,
+        "power": 150,
+        "fuelType": "DIESEL"
+      }
+    },
+    "OPL": {
+      "14": {
+        "code": "A14NET",
+        "volume": 1.4,
+        "power": 140,
+        "fuelType": "GASOLINE"
+      },
+      "16": {
+        "code": "A16XER",
+        "volume": 1.6,
+        "power": 115,
+        "fuelType": "GASOLINE"
+      },
+      "18": {
+        "code": "A18XER",
+        "volume": 1.8,
+        "power": 140,
+        "fuelType": "GASOLINE"
+      },
+      "20": {
+        "code": "A20NFT",
+        "volume": 2.0,
+        "power": 220,
+        "fuelType": "GASOLINE"
+      },
+      "2D": {
+        "code": "A20DTH",
+        "volume": 2.0,
+        "power": 160,
+        "fuelType": "DIESEL"
+      }
+    },
+    "PGT": {
+      "12": {
+        "code": "EB2",
+        "volume": 1.2,
+        "power": 110,
+        "fuelType": "GASOLINE"
+      },
+      "16": {
+        "code": "EP6",
+        "volume": 1.6,
+        "power": 120,
+        "fuelType": "GASOLINE"
+      },
+      "1T": {
+        "code": "EP6DT",
+        "volume": 1.6,
+        "power": 150,
+        "fuelType": "GASOLINE"
+      },
+      "1D": {
+        "code": "DV6",
+        "volume": 1.6,
+        "power": 115,
+        "fuelType": "DIESEL"
+      },
+      "2D": {
+        "code": "DW10",
+        "volume": 2.0,
+        "power": 150,
+        "fuelType": "DIESEL"
+      }
+    },
+    "RNT": {
+      "16": {
+        "code": "K4M",
+        "volume": 1.6,
+        "power": 102,
+        "fuelType": "GASOLINE"
+      },
+      "20": {
+        "code": "F4R",
+        "volume": 2.0,
+        "power": 143,
+        "fuelType": "GASOLINE"
+      },
+      "13": {
+        "code": "H5Ht",
+        "volume": 1.3,
+        "power": 150,
+        "fuelType": "GASOLINE"
+      },
+      "15": {
+        "code": "K9K",
+        "volume": 1.5,
+        "power": 110,
+        "fuelType": "DIESEL"
+      },
+      "25": {
+        "code": "2TR",
+        "volume": 2.5,
+        "power": 171,
+        "fuelType": "GASOLINE"
+      }
+    },
+    "SKD": {
+      "12": {
+        "code": "CJZA",
+        "volume": 1.2,
+        "power": 105,
+        "fuelType": "GASOLINE"
+      },
+      "14": {
+        "code": "CZDA",
+        "volume": 1.4,
+        "power": 150,
+        "fuelType": "GASOLINE"
+      },
+      "16": {
+        "code": "CWVA",
+        "volume": 1.6,
+        "power": 110,
+        "fuelType": "GASOLINE"
+      },
+      "20": {
+        "code": "CHHB",
+        "volume": 2.0,
+        "power": 220,
+        "fuelType": "GASOLINE"
+      },
+      "2D": {
+        "code": "EA288",
+        "volume": 2.0,
+        "power": 150,
+        "fuelType": "DIESEL"
+      }
+    },
+    "SZK": {
+      "10": {
+        "code": "K10C",
+        "volume": 1.0,
+        "power": 111,
+        "fuelType": "GASOLINE"
+      },
+      "12": {
+        "code": "K12B",
+        "volume": 1.2,
+        "power": 94,
+        "fuelType": "GASOLINE"
+      },
+      "14": {
+        "code": "K14C",
+        "volume": 1.4,
+        "power": 140,
+        "fuelType": "GASOLINE"
+      },
+      "16": {
+        "code": "M16A",
+        "volume": 1.6,
+        "power": 117,
+        "fuelType": "GASOLINE"
+      },
+      "24": {
+        "code": "J24B",
+        "volume": 2.4,
+        "power": 169,
+        "fuelType": "GASOLINE"
+      }
+    },
     "TYT": {
+      "16": {
+        "code": "1ZR-FE",
+        "volume": 1.6,
+        "power": 122,
+        "fuelType": "GASOLINE"
+      },
+      "20": {
+        "code": "6AR-FSE",
+        "volume": 2.0,
+        "power": 150,
+        "fuelType": "GASOLINE"
+      },
       "25": {
         "code": "A25A-FKS",
         "volume": 2.5,
         "power": 181,
         "fuelType": "GASOLINE"
+      },
+      "28": {
+        "code": "1GD-FTV",
+        "volume": 2.8,
+        "power": 177,
+        "fuelType": "DIESEL"
       },
       "35": {
         "code": "2GR-FKS",
@@ -77,51 +1613,109 @@
         "fuelType": "GASOLINE"
       }
     },
-
+    "VWN": {
+      "12": {
+        "code": "CBZB",
+        "volume": 1.2,
+        "power": 105,
+        "fuelType": "GASOLINE"
+      },
+      "14": {
+        "code": "CZDA",
+        "volume": 1.4,
+        "power": 150,
+        "fuelType": "GASOLINE"
+      },
+      "16": {
+        "code": "CWVA",
+        "volume": 1.6,
+        "power": 110,
+        "fuelType": "GASOLINE"
+      },
+      "20": {
+        "code": "EA888",
+        "volume": 2.0,
+        "power": 180,
+        "fuelType": "GASOLINE"
+      },
+      "2D": {
+        "code": "EA288",
+        "volume": 2.0,
+        "power": 150,
+        "fuelType": "DIESEL"
+      }
+    },
     "VLV": {
+      "20": {
+        "code": "B4204T",
+        "volume": 2.0,
+        "power": 190,
+        "fuelType": "GASOLINE"
+      },
+      "2D": {
+        "code": "D4204T",
+        "volume": 2.0,
+        "power": 190,
+        "fuelType": "DIESEL"
+      },
+      "24": {
+        "code": "B5244S",
+        "volume": 2.4,
+        "power": 170,
+        "fuelType": "GASOLINE"
+      },
       "D5": {
         "code": "D5244T",
         "volume": 2.4,
         "power": 185,
         "fuelType": "DIESEL"
-      }
-    },
-
-    "SZK": {
-      "16": {
-        "code": "M16A",
-        "volume": 1.6,
-        "power": 117,
+      },
+      "30": {
+        "code": "B6304T",
+        "volume": 3.0,
+        "power": 304,
         "fuelType": "GASOLINE"
       }
     },
-
-    "BMW": {
-      "20": {
-        "code": "B48B20",
-        "volume": 2.0,
-        "power": 184,
-        "fuelType": "GASOLINE"
-      }
-    },
-
-    "MZD": {
+    "LAD": {
       "16": {
-        "code": "MD16-48",
+        "code": "VAZ-11186",
         "volume": 1.6,
-        "power": 125,
+        "power": 87,
+        "fuelType": "GASOLINE"
+      },
+      "1A": {
+        "code": "VAZ-21126",
+        "volume": 1.6,
+        "power": 98,
+        "fuelType": "GASOLINE"
+      },
+      "1B": {
+        "code": "VAZ-21127",
+        "volume": 1.6,
+        "power": 106,
+        "fuelType": "GASOLINE"
+      },
+      "1C": {
+        "code": "VAZ-21129",
+        "volume": 1.6,
+        "power": 106,
+        "fuelType": "GASOLINE"
+      },
+      "18": {
+        "code": "VAZ-21179",
+        "volume": 1.8,
+        "power": 122,
         "fuelType": "GASOLINE"
       }
     }
   },
-
   "transmissions": {
     "A": "AUTOMATIC",
     "M": "MANUAL",
     "R": "ROBOT",
     "C": "CVT"
   },
-
   "years": {
     "0": 2000,
     "1": 2001,
@@ -151,13 +1745,11 @@
     "S": 2025,
     "T": 2026
   },
-
   "drives": {
     "F": "FWD",
     "R": "RWD",
     "A": "AWD"
   },
-
   "bodies": {
     "S": "SEDAN",
     "U": "SUV",

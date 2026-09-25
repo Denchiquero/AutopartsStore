@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.mirea.autopartsstore.catalog.dto.CreatePartRequest;
 import ru.mirea.autopartsstore.catalog.dto.PartResponse;
 import ru.mirea.autopartsstore.catalog.service.PartService;
+import ru.mirea.autopartsstore.common.dto.PageResponse;
 
 import java.util.List;
 
@@ -20,13 +21,39 @@ public class PartController {
     }
 
     @GetMapping
-    public List<PartResponse> findAll(
-            @RequestParam(required = false) Long manufacturerId,
-            @RequestParam(required = false) Long categoryId
+    public PageResponse<PartResponse> findAll(
+
+            @RequestParam(required = false)
+            Long manufacturerId,
+
+            @RequestParam(required = false)
+            Long categoryId,
+
+            @RequestParam(required = false)
+            String search,
+
+            @RequestParam(defaultValue = "id")
+            String sortBy,
+
+            @RequestParam(defaultValue = "asc")
+            String direction,
+
+            @RequestParam(defaultValue = "0")
+            int page,
+
+            @RequestParam(defaultValue = "20")
+            int size
+
     ) {
+
         return partService.findAll(
                 manufacturerId,
-                categoryId
+                categoryId,
+                search,
+                sortBy,
+                direction,
+                page,
+                size
         );
     }
 

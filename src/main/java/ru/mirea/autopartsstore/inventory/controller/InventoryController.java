@@ -2,6 +2,8 @@ package ru.mirea.autopartsstore.inventory.controller;
 
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
+import ru.mirea.autopartsstore.common.dto.PageResponse;
+import ru.mirea.autopartsstore.inventory.dto.InventoryMovementResponse;
 import ru.mirea.autopartsstore.inventory.dto.InventoryOperationRequest;
 import ru.mirea.autopartsstore.inventory.dto.StockResponse;
 import ru.mirea.autopartsstore.inventory.entity.InventoryMovement;
@@ -47,9 +49,45 @@ public class InventoryController {
 
 
     @GetMapping("/parts/{partId}/movements")
-    public List<InventoryMovement> getMovements(
-            @PathVariable Long partId
+    public PageResponse<InventoryMovementResponse> getMovements(
+
+            @PathVariable Long partId,
+
+            @RequestParam(defaultValue = "0")
+            int page,
+
+            @RequestParam(defaultValue = "20")
+            int size
+
     ) {
-        return inventoryService.getMovements(partId);
+        return inventoryService.getMovements(
+                partId,
+                page,
+                size
+        );
+    }
+
+    @GetMapping
+    public List<StockResponse> findAllStock(
+            @RequestParam(required = false)
+            Integer maxQuantity
+    ) {
+        return inventoryService.findAllStock(maxQuantity);
+    }
+
+    @GetMapping("/movements")
+    public PageResponse<InventoryMovementResponse> findAllMovements(
+
+            @RequestParam(defaultValue = "0")
+            int page,
+
+            @RequestParam(defaultValue = "20")
+            int size
+
+    ) {
+        return inventoryService.findAllMovements(
+                page,
+                size
+        );
     }
 }

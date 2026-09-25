@@ -1,11 +1,17 @@
 package ru.mirea.autopartsstore.inventory.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.mirea.autopartsstore.catalog.entity.Part;
 import ru.mirea.autopartsstore.catalog.repository.PartRepository;
+import ru.mirea.autopartsstore.common.dto.PageResponse;
 import ru.mirea.autopartsstore.common.exception.InsufficientStockException;
 import ru.mirea.autopartsstore.common.exception.ResourceNotFoundException;
+import ru.mirea.autopartsstore.inventory.dto.InventoryMovementResponse;
 import ru.mirea.autopartsstore.inventory.dto.InventoryOperationRequest;
 import ru.mirea.autopartsstore.inventory.dto.StockResponse;
 import ru.mirea.autopartsstore.inventory.entity.InventoryMovement;
@@ -16,6 +22,8 @@ import ru.mirea.autopartsstore.inventory.repository.StockRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class InventoryService {
@@ -75,10 +83,16 @@ public class InventoryService {
     }
 
     private StockResponse toResponse(Stock stock) {
+
+        Part part = stock.getPart();
+
         return new StockResponse(
-                stock.getPart().getId(),
-                stock.getPart().getSku(),
-                stock.getPart().getName(),
+                part.getId(),
+                part.getSku(),
+                part.getName(),
+                part.getManufacturer().getName(),
+                part.getCategory().getName(),
+                part.getPrice(),
                 stock.getQuantity()
         );
     }
@@ -133,7 +147,11 @@ public class InventoryService {
         return toResponse(stock);
     }
 
-    public List<InventoryMovement> getMovements(Long partId) {
+    public PageResponse<InventoryMovementResponse> getMovements(
+            Long partId,
+            int page,
+            int size
+    ) {
 
         if (!partRepository.existsById(partId)) {
             throw new ResourceNotFoundException(
@@ -141,8 +159,38 @@ public class InventoryService {
             );
         }
 
-        return movementRepository
-                .findByPart_IdOrderByCreatedAtDesc(partId);
+        validatePage(page, size);
+
+        Pageable pageable = PageRequest.of(
+                page,
+                size,
+                Sort.by(
+                        Sort.Direction.DESC,
+                        "createdAt"
+                )
+        );
+
+        Page<InventoryMovement> result =
+                movementRepository.findByPart_Id(
+                        partId,
+                        pageable
+                );
+
+        List<InventoryMovementResponse> content =
+                result.getContent()
+                        .stream()
+                        .map(this::toMovementResponse)
+                        .toList();
+
+        return new PageResponse<>(
+                content,
+                result.getNumber(),
+                result.getSize(),
+                result.getTotalElements(),
+                result.getTotalPages(),
+                result.isFirst(),
+                result.isLast()
+        );
     }
 
     @Transactional
@@ -224,4 +272,124 @@ public class InventoryService {
 
         movementRepository.save(movement);
     }
+
+    public List<StockResponse> findAllStock(
+            Integer maxQuantity
+    ) {
+
+        Map<Long, Integer> stockMap =
+                stockRepository.findAll()
+                        .stream()
+                        .collect(Collectors.toMap(
+                                Stock::getPartId,
+                                Stock::getQuantity
+                        ));
+
+        return partRepository.findAll()
+                .stream()
+                .map(part -> {
+
+                    Integer quantity =
+                            stockMap.getOrDefault(
+                                    part.getId(),
+                                    0
+                            );
+
+                    return new StockResponse(
+                            part.getId(),
+                            part.getSku(),
+                            part.getName(),
+
+                            part.getManufacturer().getName(),
+                            part.getCategory().getName(),
+
+                            part.getPrice(),
+                            quantity
+                    );
+                })
+                .filter(stock ->
+                        maxQuantity == null
+                                || stock.quantity() <= maxQuantity
+                )
+                .toList();
+    }
+
+    private InventoryMovementResponse toMovementResponse(
+            InventoryMovement movement
+    ) {
+
+        Part part = movement.getPart();
+
+        return new InventoryMovementResponse(
+                movement.getId(),
+
+                part.getId(),
+                part.getSku(),
+                part.getName(),
+
+                movement.getType(),
+                movement.getQuantity(),
+
+                movement.getCreatedAt(),
+
+                movement.getOrderId(),
+                movement.getComment()
+        );
+    }
+
+    public PageResponse<InventoryMovementResponse> findAllMovements(
+            int page,
+            int size
+    ) {
+
+        validatePage(page, size);
+
+        Pageable pageable = PageRequest.of(
+                page,
+                size,
+                Sort.by(
+                        Sort.Direction.DESC,
+                        "createdAt"
+                )
+        );
+
+        Page<InventoryMovement> result =
+                movementRepository.findAll(pageable);
+
+        List<InventoryMovementResponse> content =
+                result.getContent()
+                        .stream()
+                        .map(this::toMovementResponse)
+                        .toList();
+
+        return new PageResponse<>(
+                content,
+                result.getNumber(),
+                result.getSize(),
+                result.getTotalElements(),
+                result.getTotalPages(),
+                result.isFirst(),
+                result.isLast()
+        );
+    }
+
+    private void validatePage(
+            int page,
+            int size
+    ) {
+
+        if (page < 0) {
+            throw new IllegalArgumentException(
+                    "Page cannot be negative"
+            );
+        }
+
+        if (size < 1 || size > 100) {
+            throw new IllegalArgumentException(
+                    "Page size must be between 1 and 100"
+            );
+        }
+    }
+
+
 }

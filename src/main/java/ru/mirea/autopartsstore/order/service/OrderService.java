@@ -1,9 +1,14 @@
 package ru.mirea.autopartsstore.order.service;
 
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.mirea.autopartsstore.catalog.entity.Part;
 import ru.mirea.autopartsstore.catalog.repository.PartRepository;
+import ru.mirea.autopartsstore.common.dto.PageResponse;
 import ru.mirea.autopartsstore.common.exception.InvalidOrderStateException;
 import ru.mirea.autopartsstore.common.exception.ResourceNotFoundException;
 import ru.mirea.autopartsstore.customer.entity.Customer;
@@ -20,8 +25,12 @@ import ru.mirea.autopartsstore.order.repository.OrderItemRepository;
 import ru.mirea.autopartsstore.order.repository.OrderRepository;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderService {
@@ -47,13 +56,12 @@ public class OrderService {
     }
 
     private OrderResponse toResponse(
-            CustomerOrder order
+            CustomerOrder order,
+            List<OrderItem> orderItems
     ) {
 
         List<OrderItemResponse> items =
-                orderItemRepository
-                        .findByOrder_Id(order.getId())
-                        .stream()
+                orderItems.stream()
                         .map(item -> {
 
                             BigDecimal itemTotal =
@@ -116,6 +124,8 @@ public class OrderService {
 
         BigDecimal totalPrice = BigDecimal.ZERO;
 
+        List<OrderItem> savedItems = new ArrayList<>();
+
         for (OrderItemRequest itemRequest : request.items()) {
 
             Part part =
@@ -143,7 +153,9 @@ public class OrderService {
             // Цена фиксируется на момент заказа
             item.setUnitPrice(part.getPrice());
 
-            orderItemRepository.save(item);
+            OrderItem savedItem = orderItemRepository.save(item);
+
+            savedItems.add(savedItem);
 
             BigDecimal itemTotal =
                     part.getPrice().multiply(
@@ -157,10 +169,9 @@ public class OrderService {
         }
 
         order.setTotalPrice(totalPrice);
-
         orderRepository.save(order);
 
-        return toResponse(order);
+        return toResponse(order, savedItems);
     }
     public OrderResponse findById(Long id) {
 
@@ -174,15 +185,114 @@ public class OrderService {
                                 )
                         );
 
-        return toResponse(order);
+        List<OrderItem> items =
+                orderItemRepository.findByOrder_Id(id);
+
+        return toResponse(order, items);
     }
 
-    public List<OrderResponse> findAll() {
+    public PageResponse<OrderResponse> findAll(
+            OrderStatus status,
+            Long customerId,
+            LocalDate from,
+            LocalDate to,
+            int page,
+            int size
+    ) {
 
-        return orderRepository.findAll()
-                .stream()
-                .map(this::toResponse)
+        if (page < 0) {
+            throw new IllegalArgumentException(
+                    "Page cannot be negative"
+            );
+        }
+
+        if (size < 1 || size > 100) {
+            throw new IllegalArgumentException(
+                    "Page size must be between 1 and 100"
+            );
+        }
+
+        LocalDateTime fromDate = null;
+        LocalDateTime toDate = null;
+
+        if (from != null) {
+            fromDate = from.atStartOfDay();
+        }
+
+        if (to != null) {
+            toDate = to.plusDays(1).atStartOfDay();
+        }
+
+        Pageable pageable = PageRequest.of(
+                page,
+                size,
+                Sort.by(
+                        Sort.Direction.DESC,
+                        "createdAt"
+                )
+        );
+
+        Page<CustomerOrder> result =
+                orderRepository.findFiltered(
+                        status,
+                        customerId,
+                        fromDate,
+                        toDate,
+                        pageable
+                );
+
+        List<CustomerOrder> orders =
+                result.getContent();
+
+        if (orders.isEmpty()) {
+            return new PageResponse<>(
+                    List.of(),
+                    result.getNumber(),
+                    result.getSize(),
+                    result.getTotalElements(),
+                    result.getTotalPages(),
+                    result.isFirst(),
+                    result.isLast()
+            );
+        }
+
+        List<Long> orderIds = orders.stream()
+                .map(CustomerOrder::getId)
                 .toList();
+
+        List<OrderItem> allItems =
+                orderItemRepository.findAllByOrderIds(orderIds);
+
+        Map<Long, List<OrderItem>> itemsByOrder =
+                allItems.stream()
+                        .collect(
+                                Collectors.groupingBy(
+                                        item -> item.getOrder().getId()
+                                )
+                        );
+
+        List<OrderResponse> content =
+                orders.stream()
+                        .map(order ->
+                                toResponse(
+                                        order,
+                                        itemsByOrder.getOrDefault(
+                                                order.getId(),
+                                                List.of()
+                                        )
+                                )
+                        )
+                        .toList();
+
+        return new PageResponse<>(
+                content,
+                result.getNumber(),
+                result.getSize(),
+                result.getTotalElements(),
+                result.getTotalPages(),
+                result.isFirst(),
+                result.isLast()
+        );
     }
 
 
@@ -256,6 +366,9 @@ public class OrderService {
 
         orderRepository.save(order);
 
-        return toResponse(order);
+        List<OrderItem> items =
+                orderItemRepository.findByOrder_Id(orderId);
+
+        return toResponse(order, items);
     }
 }
