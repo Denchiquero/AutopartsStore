@@ -3,6 +3,7 @@ package ru.mirea.autopartsstore.order.controller;
 import jakarta.validation.Valid;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.mirea.autopartsstore.common.dto.PageResponse;
 import ru.mirea.autopartsstore.order.dto.CreateOrderRequest;
@@ -12,7 +13,6 @@ import ru.mirea.autopartsstore.order.entity.OrderStatus;
 import ru.mirea.autopartsstore.order.service.OrderService;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/orders")
@@ -29,20 +29,32 @@ public class OrderController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public OrderResponse create(
+            Authentication authentication,
             @Valid @RequestBody CreateOrderRequest request
     ) {
-        return orderService.create(request);
+
+        return orderService.create(
+                authentication.getName(),
+                request
+        );
     }
 
     @GetMapping("/{id}")
     public OrderResponse findById(
+            Authentication authentication,
             @PathVariable Long id
     ) {
-        return orderService.findById(id);
+
+        return orderService.findById(
+                authentication.getName(),
+                id
+        );
     }
 
     @GetMapping
     public PageResponse<OrderResponse> findAll(
+
+            Authentication authentication,
 
             @RequestParam(required = false)
             OrderStatus status,
@@ -65,7 +77,9 @@ public class OrderController {
             int size
 
     ) {
+
         return orderService.findAll(
+                authentication.getName(),
                 status,
                 customerId,
                 from,

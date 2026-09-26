@@ -267,4 +267,46 @@ GET http://localhost:8080/api/parts?search=filter&manufacturerId=2&categoryId=2&
 
 ###
 
-GET http://localhost:8080/api/parts?page=2&size=20
+GET http://localhost:8080/api/orders?page=0&size=20
+
+###
+
+GET http://localhost:8080/api/parts
+
+###
+
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "Иван Админов",
+  "phone": "+79991234597",
+  "email": "ivan@pizdorvan.com",
+  "password": "password234"
+}
+
+###
+
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "ivan@pizdorvan.com",
+  "password": "password234"
+}
+
+###
+
+GET http://localhost:8080/api/parts
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpdmFuQHBpemRvcnZhbi5jb20iLCJyb2xlIjoiVVNFUiIsInVzZXJJZCI6MiwiaWF0IjoxNzkwNDYxMzY0LCJleHAiOjE3OTA1NDc3NjR9.0BtZ4XDsDTQnGRnG1WKSXIv5j2_te5IbNNfb872u2qg
+
+###
+
+POST http://localhost:8080/api/inventory/parts/1/receipt
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpdmFuQHBpemRvcnZhbi5jb20iLCJyb2xlIjoiVVNFUiIsInVzZXJJZCI6MiwiaWF0IjoxNzkwNDYxMzY0LCJleHAiOjE3OTA1NDc3NjR9.0BtZ4XDsDTQnGRnG1WKSXIv5j2_te5IbNNfb872u2qg
+Content-Type: application/json
+
+{
+  "quantity": 5,
+  "comment": "Поставка"
+}

@@ -1,8 +1,11 @@
 package ru.mirea.autopartsstore.common.exception;
 
-public class InsufficientStockException extends RuntimeException {
+public class InsufficientStockException
+        extends RuntimeException {
 
-    public InsufficientStockException(String message) {
+    public InsufficientStockException(
+            String message
+    ) {
         super(message);
     }
 }

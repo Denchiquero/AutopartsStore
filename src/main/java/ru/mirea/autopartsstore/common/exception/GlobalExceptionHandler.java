@@ -24,14 +24,19 @@ public class GlobalExceptionHandler {
 
 
     @ExceptionHandler(InsufficientStockException.class)
-    public ResponseEntity<Map<String, String>> handleInsufficientStock(
+    public ResponseEntity<Map<String, String>>
+    handleInsufficientStock(
             InsufficientStockException ex
     ) {
+
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
-                .body(Map.of(
-                        "error", ex.getMessage()
-                ));
+                .body(
+                        Map.of(
+                                "error",
+                                ex.getMessage()
+                        )
+                );
     }
 
 

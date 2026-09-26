@@ -7,9 +7,6 @@ import java.util.List;
 
 public record CreateOrderRequest(
 
-        @NotNull
-        Long customerId,
-
         @NotEmpty
         @Valid
         List<OrderItemRequest> items

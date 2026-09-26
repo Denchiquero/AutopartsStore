@@ -55,7 +55,7 @@ public class InventoryService {
                         )
                 );
 
-        Stock stock = stockRepository.findById(partId)
+        Stock stock = stockRepository.findByPartIdForUpdate(partId)
                 .orElseGet(() -> {
                     Stock newStock = new Stock();
                     newStock.setPart(part);
@@ -115,7 +115,7 @@ public class InventoryService {
             InventoryOperationRequest request
     ) {
 
-        Stock stock = stockRepository.findById(partId)
+        Stock stock = stockRepository.findByPartIdForUpdate(partId)
                 .orElseThrow(() ->
                         new ResourceNotFoundException(
                                 "Stock for part with id " + partId + " not found"
@@ -200,7 +200,7 @@ public class InventoryService {
             Long orderId
     ) {
 
-        Stock stock = stockRepository.findById(partId)
+        Stock stock = stockRepository.findByPartIdForUpdate(partId)
                 .orElseThrow(() ->
                         new IllegalArgumentException(
                                 "Part with id " + partId + " is out of stock"

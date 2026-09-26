@@ -16,18 +16,23 @@ public interface OrderRepository
 
     @EntityGraph(attributePaths = "customer")
     @Query("""
-            SELECT o
-            FROM CustomerOrder o
-            WHERE (:status IS NULL OR o.status = :status)
-              AND (:customerId IS NULL OR o.customer.id = :customerId)
-              AND (:fromDate IS NULL OR o.createdAt >= :fromDate)
-              AND (:toDate IS NULL OR o.createdAt < :toDate)
-            """)
+        SELECT o
+        FROM CustomerOrder o
+        WHERE (:status IS NULL OR o.status = :status)
+          AND (:customerId IS NULL OR o.customer.id = :customerId)
+          AND (:useFrom = false OR o.createdAt >= :fromDate)
+          AND (:useTo = false OR o.createdAt < :toDate)
+        """)
     Page<CustomerOrder> findFiltered(
             @Param("status") OrderStatus status,
             @Param("customerId") Long customerId,
+
+            @Param("useFrom") boolean useFrom,
             @Param("fromDate") LocalDateTime fromDate,
+
+            @Param("useTo") boolean useTo,
             @Param("toDate") LocalDateTime toDate,
+
             Pageable pageable
     );
 }

@@ -6,6 +6,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import ru.mirea.autopartsstore.auth.entity.AppUser;
+import ru.mirea.autopartsstore.auth.entity.UserRole;
+import ru.mirea.autopartsstore.auth.repository.AppUserRepository;
 import ru.mirea.autopartsstore.catalog.entity.Part;
 import ru.mirea.autopartsstore.catalog.repository.PartRepository;
 import ru.mirea.autopartsstore.common.dto.PageResponse;
@@ -27,9 +30,7 @@ import ru.mirea.autopartsstore.order.repository.OrderRepository;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,19 +41,22 @@ public class OrderService {
     private final CustomerRepository customerRepository;
     private final PartRepository partRepository;
     private final InventoryService inventoryService;
+    private final AppUserRepository appUserRepository;
 
     public OrderService(
             OrderRepository orderRepository,
             OrderItemRepository orderItemRepository,
             CustomerRepository customerRepository,
             PartRepository partRepository,
-            InventoryService inventoryService
-    ) {
+            InventoryService inventoryService,
+            AppUserRepository appUserRepository) {
+
         this.orderRepository = orderRepository;
         this.orderItemRepository = orderItemRepository;
         this.customerRepository = customerRepository;
         this.partRepository = partRepository;
         this.inventoryService = inventoryService;
+        this.appUserRepository = appUserRepository;
     }
 
     private OrderResponse toResponse(
@@ -100,18 +104,21 @@ public class OrderService {
 
     @Transactional
     public OrderResponse create(
+            String email,
             CreateOrderRequest request
     ) {
 
-        Customer customer =
-                customerRepository.findById(request.customerId())
-                        .orElseThrow(() ->
-                                new ResourceNotFoundException(
-                                        "Customer with id "
-                                                + request.customerId()
-                                                + " not found"
-                                )
-                        );
+        validateOrderItems(request.items());
+
+        AppUser user = getCurrentUser(email);
+
+        if (user.getCustomer() == null) {
+            throw new IllegalStateException(
+                    "Only customer accounts can create orders"
+            );
+        }
+
+        Customer customer = user.getCustomer();
 
         CustomerOrder order = new CustomerOrder();
 
@@ -124,19 +131,21 @@ public class OrderService {
 
         BigDecimal totalPrice = BigDecimal.ZERO;
 
-        List<OrderItem> savedItems = new ArrayList<>();
+        List<OrderItem> savedItems =
+                new ArrayList<>();
 
-        for (OrderItemRequest itemRequest : request.items()) {
+        for (OrderItemRequest itemRequest
+                : request.items()) {
 
-            Part part =
-                    partRepository.findById(itemRequest.partId())
-                            .orElseThrow(() ->
-                                    new ResourceNotFoundException(
-                                            "Part with id "
-                                                    + itemRequest.partId()
-                                                    + " not found"
-                                    )
-                            );
+            Part part = partRepository
+                    .findById(itemRequest.partId())
+                    .orElseThrow(() ->
+                            new ResourceNotFoundException(
+                                    "Part with id "
+                                            + itemRequest.partId()
+                                            + " not found"
+                            )
+                    );
 
             inventoryService.decreaseForOrder(
                     part.getId(),
@@ -148,32 +157,48 @@ public class OrderService {
 
             item.setOrder(order);
             item.setPart(part);
-            item.setQuantity(itemRequest.quantity());
+            item.setQuantity(
+                    itemRequest.quantity()
+            );
+            item.setUnitPrice(
+                    part.getPrice()
+            );
 
-            // Цена фиксируется на момент заказа
-            item.setUnitPrice(part.getPrice());
-
-            OrderItem savedItem = orderItemRepository.save(item);
+            OrderItem savedItem =
+                    orderItemRepository.save(item);
 
             savedItems.add(savedItem);
 
             BigDecimal itemTotal =
-                    part.getPrice().multiply(
-                            BigDecimal.valueOf(
-                                    itemRequest.quantity()
-                            )
-                    );
+                    part.getPrice()
+                            .multiply(
+                                    BigDecimal.valueOf(
+                                            itemRequest.quantity()
+                                    )
+                            );
 
             totalPrice =
                     totalPrice.add(itemTotal);
         }
 
         order.setTotalPrice(totalPrice);
+
         orderRepository.save(order);
 
-        return toResponse(order, savedItems);
+        return toResponse(
+                order,
+                savedItems
+        );
     }
-    public OrderResponse findById(Long id) {
+
+
+    public OrderResponse findById(
+            String email,
+            Long id
+    ) {
+
+        AppUser user =
+                getCurrentUser(email);
 
         CustomerOrder order =
                 orderRepository.findById(id)
@@ -185,13 +210,35 @@ public class OrderService {
                                 )
                         );
 
-        List<OrderItem> items =
-                orderItemRepository.findByOrder_Id(id);
+        if (user.getRole() != UserRole.ADMIN) {
 
-        return toResponse(order, items);
+            if (user.getCustomer() == null
+                    || !order.getCustomer()
+                    .getId()
+                    .equals(
+                            user.getCustomer().getId()
+                    )) {
+
+                throw new ResourceNotFoundException(
+                        "Order with id "
+                                + id
+                                + " not found"
+                );
+            }
+        }
+
+        List<OrderItem> items =
+                orderItemRepository
+                        .findByOrder_Id(id);
+
+        return toResponse(
+                order,
+                items
+        );
     }
 
     public PageResponse<OrderResponse> findAll(
+            String email,
             OrderStatus status,
             Long customerId,
             LocalDate from,
@@ -212,17 +259,42 @@ public class OrderService {
             );
         }
 
-        LocalDateTime fromDate = null;
-        LocalDateTime toDate = null;
+        AppUser user =
+                getCurrentUser(email);
 
-        if (from != null) {
-            fromDate = from.atStartOfDay();
+        Long effectiveCustomerId;
+
+        if (user.getRole() == UserRole.ADMIN) {
+
+            effectiveCustomerId = customerId;
+
+        } else {
+
+            if (user.getCustomer() == null) {
+                throw new IllegalStateException(
+                        "Customer account not found"
+                );
+            }
+
+            effectiveCustomerId =
+                    user.getCustomer().getId();
         }
 
-        if (to != null) {
-            toDate = to.plusDays(1).atStartOfDay();
-        }
+        // Нужно ли вообще применять фильтры по датам
+        boolean useFrom = from != null;
+        boolean useTo = to != null;
 
+        // Даже если фильтр выключен, передаем настоящий LocalDateTime,
+        // чтобы PostgreSQL мог определить тип параметра
+        LocalDateTime fromDate = useFrom
+                ? from.atStartOfDay()
+                : LocalDateTime.of(2000, 1, 1, 0, 0);
+
+        LocalDateTime toDate = useTo
+                ? to.plusDays(1).atStartOfDay()
+                : LocalDateTime.of(9999, 1, 1, 0, 0);
+
+        // Заказы по умолчанию показываем от новых к старым
         Pageable pageable = PageRequest.of(
                 page,
                 size,
@@ -232,11 +304,14 @@ public class OrderService {
                 )
         );
 
+        // Получаем только нужную страницу заказов
         Page<CustomerOrder> result =
                 orderRepository.findFiltered(
                         status,
-                        customerId,
+                        effectiveCustomerId,
+                        useFrom,
                         fromDate,
+                        useTo,
                         toDate,
                         pageable
                 );
@@ -244,6 +319,7 @@ public class OrderService {
         List<CustomerOrder> orders =
                 result.getContent();
 
+        // Если страница пустая, к order_item вообще не обращаемся
         if (orders.isEmpty()) {
             return new PageResponse<>(
                     List.of(),
@@ -256,21 +332,28 @@ public class OrderService {
             );
         }
 
+        // Собираем ID всех заказов текущей страницы
         List<Long> orderIds = orders.stream()
                 .map(CustomerOrder::getId)
                 .toList();
 
+        // Одним запросом получаем позиции сразу всех заказов
         List<OrderItem> allItems =
-                orderItemRepository.findAllByOrderIds(orderIds);
+                orderItemRepository.findAllByOrderIds(
+                        orderIds
+                );
 
+        // Группируем позиции по заказу
         Map<Long, List<OrderItem>> itemsByOrder =
                 allItems.stream()
                         .collect(
                                 Collectors.groupingBy(
-                                        item -> item.getOrder().getId()
+                                        item ->
+                                                item.getOrder().getId()
                                 )
                         );
 
+        // Формируем DTO
         List<OrderResponse> content =
                 orders.stream()
                         .map(order ->
@@ -323,43 +406,23 @@ public class OrderService {
             OrderStatus newStatus
     ) {
 
-        CustomerOrder order = orderRepository.findById(orderId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Order with id " + orderId + " not found"
-                        )
-                );
+        CustomerOrder order =
+                orderRepository.findById(orderId)
+                        .orElseThrow(() ->
+                                new ResourceNotFoundException(
+                                        "Order with id "
+                                                + orderId
+                                                + " not found"
+                                )
+                        );
 
-        OrderStatus currentStatus = order.getStatus();
-
-        if (currentStatus == newStatus) {
-            throw new InvalidOrderStateException(
-                    "Order already has status " + newStatus
-            );
-        }
-
-        if (currentStatus == OrderStatus.CANCELLED) {
-            throw new InvalidOrderStateException(
-                    "Cancelled order status cannot be changed"
-            );
-        }
-
-        if (currentStatus == OrderStatus.COMPLETED) {
-            throw new InvalidOrderStateException(
-                    "Completed order status cannot be changed"
-            );
-        }
+        validateStatusTransition(
+                order.getStatus(),
+                newStatus
+        );
 
         if (newStatus == OrderStatus.CANCELLED) {
             returnItemsToStock(order);
-        }
-
-        if (newStatus == OrderStatus.COMPLETED
-                && currentStatus != OrderStatus.CONFIRMED) {
-
-            throw new InvalidOrderStateException(
-                    "Only confirmed order can be completed"
-            );
         }
 
         order.setStatus(newStatus);
@@ -367,8 +430,76 @@ public class OrderService {
         orderRepository.save(order);
 
         List<OrderItem> items =
-                orderItemRepository.findByOrder_Id(orderId);
+                orderItemRepository
+                        .findByOrder_Id(orderId);
 
-        return toResponse(order, items);
+        return toResponse(
+                order,
+                items
+        );
+    }
+
+    private AppUser getCurrentUser(String email) {
+
+        return appUserRepository
+                .findByEmailIgnoreCase(email)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "User not found"
+                        )
+                );
+    }
+
+    private void validateOrderItems(
+            List<OrderItemRequest> items
+    ) {
+
+        Set<Long> partIds = new HashSet<>();
+
+        for (OrderItemRequest item : items) {
+
+            if (!partIds.add(item.partId())) {
+                throw new IllegalArgumentException(
+                        "Part with id "
+                                + item.partId()
+                                + " is duplicated in order"
+                );
+            }
+        }
+    }
+
+    private void validateStatusTransition(
+            OrderStatus current,
+            OrderStatus target
+    ) {
+
+        if (current == target) {
+            throw new IllegalStateException(
+                    "Order already has status " + current
+            );
+        }
+
+        boolean allowed = switch (current) {
+
+            case CREATED ->
+                    target == OrderStatus.CONFIRMED
+                            || target == OrderStatus.CANCELLED;
+
+            case CONFIRMED ->
+                    target == OrderStatus.COMPLETED
+                            || target == OrderStatus.CANCELLED;
+
+            case CANCELLED, COMPLETED ->
+                    false;
+        };
+
+        if (!allowed) {
+            throw new IllegalStateException(
+                    "Cannot change order status from "
+                            + current
+                            + " to "
+                            + target
+            );
+        }
     }
 }

@@ -1,14 +1,14 @@
-package ru.mirea.autopartsstore.customer.repository;
+package ru.mirea.autopartsstore.auth.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ru.mirea.autopartsstore.customer.entity.Customer;
+import ru.mirea.autopartsstore.auth.entity.AppUser;
 
 import java.util.Optional;
 
-public interface CustomerRepository
-        extends JpaRepository<Customer, Long> {
+public interface AppUserRepository
+        extends JpaRepository<AppUser, Long> {
 
-    Optional<Customer> findByEmail(String email);
+    Optional<AppUser> findByEmailIgnoreCase(String email);
 
     boolean existsByEmailIgnoreCase(String email);
 
