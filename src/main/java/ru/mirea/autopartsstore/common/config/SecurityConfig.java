@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -11,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import ru.mirea.autopartsstore.auth.security.JwtAuthenticationFilter;
+import ru.mirea.autopartsstore.common.exception.SecurityErrorWriter;
 
 @Configuration
 public class SecurityConfig {
@@ -23,7 +25,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(
             HttpSecurity http,
-            JwtAuthenticationFilter jwtAuthenticationFilter
+            JwtAuthenticationFilter jwtAuthenticationFilter,
+            SecurityErrorWriter securityErrorWriter
     ) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
@@ -38,17 +41,21 @@ public class SecurityConfig {
 
                         .authenticationEntryPoint(
                                 (request, response, authException) ->
-                                        response.sendError(
-                                                HttpServletResponse.SC_UNAUTHORIZED,
-                                                "Unauthorized"
+                                        securityErrorWriter.write(
+                                                response,
+                                                HttpStatus.UNAUTHORIZED,
+                                                "Authentication required",
+                                                request.getRequestURI()
                                         )
                         )
 
                         .accessDeniedHandler(
                                 (request, response, accessDeniedException) ->
-                                        response.sendError(
-                                                HttpServletResponse.SC_FORBIDDEN,
-                                                "Forbidden"
+                                        securityErrorWriter.write(
+                                                response,
+                                                HttpStatus.FORBIDDEN,
+                                                "Access denied",
+                                                request.getRequestURI()
                                         )
                         )
                 )

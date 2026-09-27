@@ -102,6 +102,23 @@ class SecurityIntegrationTest {
                 )
                 .andExpect(
                         status().isUnauthorized()
+                )
+
+        .andExpect(
+                jsonPath("$.status")
+                        .value(401)
+        )
+                .andExpect(
+                        jsonPath("$.error")
+                                .value("Unauthorized")
+                )
+                .andExpect(
+                        jsonPath("$.message")
+                                .value("Authentication required")
+                )
+                .andExpect(
+                        jsonPath("$.path")
+                                .value("/api/profile")
                 );
     }
 
@@ -118,6 +135,22 @@ class SecurityIntegrationTest {
                 )
                 .andExpect(
                         status().isForbidden()
+                )
+                .andExpect(
+                        jsonPath("$.status")
+                                .value(403)
+                )
+                .andExpect(
+                        jsonPath("$.error")
+                                .value("Forbidden")
+                )
+                .andExpect(
+                        jsonPath("$.message")
+                                .value("Access denied")
+                )
+                .andExpect(
+                        jsonPath("$.path")
+                                .value("/api/inventory")
                 );
     }
 
