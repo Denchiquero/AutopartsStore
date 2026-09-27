@@ -1,0 +1,7 @@
+jwt:
+  secret: MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTIzNDU2Nzg5MDE=
+  expiration: 86400000
+
+spring:
+  jpa:
+    open-in-view: false

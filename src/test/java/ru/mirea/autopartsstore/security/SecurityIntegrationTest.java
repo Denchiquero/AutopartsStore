@@ -5,8 +5,13 @@ import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 import ru.mirea.autopartsstore.auth.entity.AppUser;
 import ru.mirea.autopartsstore.auth.entity.UserRole;
 import ru.mirea.autopartsstore.auth.repository.AppUserRepository;
@@ -19,12 +24,18 @@ import java.util.UUID;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest(properties = {
-        "jwt.secret=MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTIzNDU2Nzg5MDE=",
-        "jwt.expiration=86400000"
-})
+@Testcontainers
+@SpringBootTest
 @AutoConfigureMockMvc
+@ActiveProfiles("test")
 class SecurityIntegrationTest {
+
+    @Container
+    @ServiceConnection
+    static PostgreSQLContainer<?> postgres =
+            new PostgreSQLContainer<>(
+                    "postgres:17-alpine"
+            );
 
     @Autowired
     private MockMvc mockMvc;
