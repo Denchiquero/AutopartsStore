@@ -161,5 +161,88 @@ class SecurityIntegrationTest {
                 );
     }
 
+    @Test
+    void orders_shouldRequireAuthentication()
+            throws Exception {
 
+        mockMvc.perform(
+                        get("/api/orders")
+                )
+                .andExpect(
+                        status().isUnauthorized()
+                );
+    }
+
+    @Test
+    void orders_shouldAllowUser()
+            throws Exception {
+
+        mockMvc.perform(
+                        get("/api/orders")
+                                .header(
+                                        "Authorization",
+                                        "Bearer " + userToken
+                                )
+                )
+                .andExpect(
+                        status().isOk()
+                )
+                .andExpect(
+                        jsonPath("$.content").isArray()
+                );
+    }
+
+    @Test
+    void orderStatus_shouldRejectUser()
+            throws Exception {
+
+        mockMvc.perform(
+                        patch("/api/orders/999/status")
+                                .header(
+                                        "Authorization",
+                                        "Bearer " + userToken
+                                )
+                                .contentType(
+                                        "application/json"
+                                )
+                                .content("""
+                            {
+                              "status": "CONFIRMED"
+                            }
+                            """)
+                )
+                .andExpect(
+                        status().isForbidden()
+                );
+    }
+
+    @Test
+    void partsCreate_shouldRejectUser()
+            throws Exception {
+
+        mockMvc.perform(
+                        post("/api/parts")
+                                .header(
+                                        "Authorization",
+                                        "Bearer " + userToken
+                                )
+                                .contentType(
+                                        "application/json"
+                                )
+                                .content("""
+                            {
+                              "name": "Test part",
+                              "sku": "TEST",
+                              "article": "TEST",
+                              "description": "Test",
+                              "price": 500,
+                              "manufacturerId": 1,
+                              "categoryId": 1
+                            }
+                            """)
+                )
+                .andExpect(
+                        status().isForbidden()
+                );
+    }
 }
