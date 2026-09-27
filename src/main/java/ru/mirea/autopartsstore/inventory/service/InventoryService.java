@@ -123,7 +123,7 @@ public class InventoryService {
                 );
 
         if (stock.getQuantity() < request.quantity()) {
-            throw new IllegalArgumentException(
+            throw new InsufficientStockException(
                     "Not enough stock. Available: " + stock.getQuantity()
             );
         }
@@ -246,7 +246,7 @@ public class InventoryService {
             Long orderId
     ) {
 
-        Stock stock = stockRepository.findById(partId)
+        Stock stock = stockRepository.findByPartIdForUpdate(partId)
                 .orElseThrow(() ->
                         new IllegalStateException(
                                 "Stock for part with id " + partId + " not found"
