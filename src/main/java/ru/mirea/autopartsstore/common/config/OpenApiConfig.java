@@ -15,24 +15,28 @@ public class OpenApiConfig {
     public OpenAPI openAPI() {
 
         return new OpenAPI()
-
                 .info(
                         new Info()
                                 .title("Auto Parts Store API")
-                                .description(
-                                        "REST API интернет-магазина автозапчастей"
-                                )
-                                .version("1.0")
-                )
+                                .description("""
+                                    REST API интернет-магазина автозапчастей.
 
+                                    Возможности:
+                                    - каталог запчастей;
+                                    - подбор по VIN;
+                                    - совместимость автомобилей и запчастей;
+                                    - управление складом;
+                                    - оформление заказов;
+                                    - JWT-аутентификация.
+                                    """)
+                                .version("1.0.0")
+                )
                 .components(
                         new Components()
                                 .addSecuritySchemes(
                                         "bearerAuth",
                                         new SecurityScheme()
-                                                .type(
-                                                        SecurityScheme.Type.HTTP
-                                                )
+                                                .type(SecurityScheme.Type.HTTP)
                                                 .scheme("bearer")
                                                 .bearerFormat("JWT")
                                 )
