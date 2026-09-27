@@ -1,5 +1,7 @@
 package ru.mirea.autopartsstore.catalog.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +13,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/categories")
+@Tag(
+        name = "Categories",
+        description = "Список категорий автозапчастей"
+)
+
 public class PartCategoryController {
 
     private final PartCategoryService categoryService;
@@ -21,11 +28,13 @@ public class PartCategoryController {
         this.categoryService = categoryService;
     }
 
+    @Operation(summary = "Получить категории запчастей")
     @GetMapping
     public List<PartCategoryResponse> findAll() {
         return categoryService.findAll();
     }
 
+    @Operation(summary = "Получить категории запчастей по ID")
     @GetMapping("/{id}")
     public PartCategoryResponse findById(
             @PathVariable Long id
@@ -33,6 +42,7 @@ public class PartCategoryController {
         return categoryService.findById(id);
     }
 
+    @Operation(summary = "Создать категорию")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public PartCategoryResponse create(
@@ -41,6 +51,7 @@ public class PartCategoryController {
         return categoryService.create(request);
     }
 
+    @Operation(summary = "Изменить категорию")
     @PutMapping("/{id}")
     public PartCategoryResponse update(
             @PathVariable Long id,
@@ -49,6 +60,7 @@ public class PartCategoryController {
         return categoryService.update(id, request);
     }
 
+    @Operation(summary = "Удалить категорию")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(

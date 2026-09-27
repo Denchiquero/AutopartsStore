@@ -1,5 +1,8 @@
 package ru.mirea.autopartsstore.auth.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -9,6 +12,11 @@ import ru.mirea.autopartsstore.auth.service.AuthService;
 
 @RestController
 @RequestMapping("/api/auth")
+@Tag(
+        name = "Authentification",
+        description = "Аутентификация пользователей"
+)
+
 public class AuthController {
 
     private final AuthService authService;
@@ -19,6 +27,7 @@ public class AuthController {
         this.authService = authService;
     }
 
+    @Operation(summary = "Зарегистрировать пользователя")
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
     public RegisterResponse register(
@@ -29,6 +38,7 @@ public class AuthController {
         return authService.register(request);
     }
 
+    @Operation(summary = "Войти в систему")
     @PostMapping("/login")
     public LoginResponse login(
             @Valid
@@ -38,7 +48,9 @@ public class AuthController {
         return authService.login(request);
     }
 
+    @Operation(summary = "Получить текущего пользователя")
     @GetMapping("/me")
+    @SecurityRequirement(name = "bearerAuth")
     public CurrentUserResponse me(
             Authentication authentication
     ) {

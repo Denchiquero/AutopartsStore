@@ -1,5 +1,8 @@
 package ru.mirea.autopartsstore.order.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -16,6 +19,11 @@ import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/api/orders")
+@Tag(
+        name = "Orders",
+        description = "Управление заказами"
+)
+@SecurityRequirement(name = "bearerAuth")
 public class OrderController {
 
     private final OrderService orderService;
@@ -26,31 +34,10 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public OrderResponse create(
-            Authentication authentication,
-            @Valid @RequestBody CreateOrderRequest request
-    ) {
-
-        return orderService.create(
-                authentication.getName(),
-                request
-        );
-    }
-
-    @GetMapping("/{id}")
-    public OrderResponse findById(
-            Authentication authentication,
-            @PathVariable Long id
-    ) {
-
-        return orderService.findById(
-                authentication.getName(),
-                id
-        );
-    }
-
+    @Operation(
+            summary = "Получить заказы",
+            description = "Поддерживает фильтрацию по статусу, покупателю и дате, а также пагинацию"
+    )
     @GetMapping
     public PageResponse<OrderResponse> findAll(
 
@@ -89,6 +76,44 @@ public class OrderController {
         );
     }
 
+    @Operation(summary = "Получить заказ по ID")
+    @GetMapping("/{id}")
+    public OrderResponse findById(
+            Authentication authentication,
+            @PathVariable Long id
+    ) {
+
+        return orderService.findById(
+                authentication.getName(),
+                id
+        );
+    }
+
+    @Operation(
+            summary = "Создать заказ",
+            description = "Создаёт заказ текущего пользователя и списывает заказанные товары со склада"
+    )
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public OrderResponse create(
+            Authentication authentication,
+            @Valid @RequestBody CreateOrderRequest request
+    ) {
+
+        return orderService.create(
+                authentication.getName(),
+                request
+        );
+    }
+
+    @Operation(
+            summary = "Изменить статус заказа",
+            description = """
+                Допустимые переходы:
+                CREATED → CONFIRMED или CANCELLED
+                CONFIRMED → COMPLETED или CANCELLED
+                """
+    )
     @PatchMapping("/{id}/status")
     public OrderResponse changeStatus(
             @PathVariable Long id,
