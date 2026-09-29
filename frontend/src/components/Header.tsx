@@ -1,6 +1,29 @@
-import { Link } from "react-router-dom";
+import {
+    Link,
+    useNavigate
+} from "react-router-dom";
+
+import { useAuth } from "../auth/AuthContext";
+import { useCart } from "../cart/CartContext";
 
 function Header() {
+
+    const navigate = useNavigate();
+
+    const {
+        user,
+        loading,
+        logout
+    } = useAuth();
+
+    const { totalItems } = useCart();
+
+    function handleLogout() {
+
+        logout();
+
+        navigate("/");
+    }
 
     return (
         <header className="header">
@@ -13,6 +36,7 @@ function Header() {
             </Link>
 
             <nav>
+
                 <Link to="/">
                     Каталог
                 </Link>
@@ -21,17 +45,54 @@ function Header() {
                     Подбор по VIN
                 </Link>
 
-                <Link to="/orders">
-                    Заказы
+                <Link to="/cart">
+                    Корзина
+                    {totalItems > 0 && (
+                        <span className="cart-count">
+            {totalItems}
+        </span>
+                    )}
                 </Link>
 
-                <Link to="/profile">
-                    Профиль
-                </Link>
+                {user && (
+                    <Link to="/orders">
+                        Заказы
+                    </Link>
+                )}
 
-                <Link to="/login">
-                    Войти
-                </Link>
+                {user && (
+                    <Link to="/profile">
+                        Профиль
+                    </Link>
+                )}
+
+                {!loading && !user && (
+                    <Link to="/login">
+                        Войти
+                    </Link>
+                )}
+
+                {!loading && user && (
+                    <>
+                        <span className="user-email">
+                            {user.email}
+                        </span>
+
+                        <button
+                            className="logout-button"
+                            onClick={handleLogout}
+                        >
+                            Выйти
+                        </button>
+                    </>
+                )}
+
+                {user?.role === "ADMIN" && (
+                    <Link to="/admin/inventory">
+                        Админка
+                    </Link>
+                )}
+
             </nav>
 
         </header>

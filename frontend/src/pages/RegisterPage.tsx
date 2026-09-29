@@ -8,13 +8,24 @@ import {
     useNavigate
 } from "react-router-dom";
 
-import { useAuth } from "../auth/AuthContext";
+import {
+    register
+} from "../api/authApi";
 
-function LoginPage() {
+import {
+    useAuth
+} from "../auth/AuthContext";
+
+function RegisterPage() {
 
     const navigate = useNavigate();
-
     const { login } = useAuth();
+
+    const [name, setName] =
+        useState("");
+
+    const [phone, setPhone] =
+        useState("");
 
     const [email, setEmail] =
         useState("");
@@ -38,6 +49,14 @@ function LoginPage() {
             setLoading(true);
             setError("");
 
+            await register({
+                name,
+                phone,
+                email,
+                password
+            });
+
+            // После регистрации сразу логинимся
             await login(
                 email,
                 password
@@ -49,7 +68,7 @@ function LoginPage() {
             console.error(error);
 
             setError(
-                "Неверный email или пароль"
+                "Не удалось зарегистрироваться"
             );
 
         } finally {
@@ -65,7 +84,35 @@ function LoginPage() {
                 onSubmit={handleSubmit}
             >
 
-                <h1>Вход</h1>
+                <h1>Регистрация</h1>
+
+                <label>
+                    Имя
+                </label>
+
+                <input
+                    value={name}
+                    required
+                    onChange={(event) =>
+                        setName(
+                            event.target.value
+                        )
+                    }
+                />
+
+                <label>
+                    Телефон
+                </label>
+
+                <input
+                    value={phone}
+                    required
+                    onChange={(event) =>
+                        setPhone(
+                            event.target.value
+                        )
+                    }
+                />
 
                 <label>
                     Email
@@ -90,6 +137,7 @@ function LoginPage() {
                     type="password"
                     value={password}
                     required
+                    minLength={8}
                     onChange={(event) =>
                         setPassword(
                             event.target.value
@@ -108,14 +156,14 @@ function LoginPage() {
                     disabled={loading}
                 >
                     {loading
-                        ? "Вход..."
-                        : "Войти"}
+                        ? "Регистрация..."
+                        : "Зарегистрироваться"}
                 </button>
 
                 <p>
-                    Нет аккаунта?{" "}
-                    <Link to="/register">
-                        Зарегистрироваться
+                    Уже есть аккаунт?{" "}
+                    <Link to="/login">
+                        Войти
                     </Link>
                 </p>
 
@@ -125,4 +173,4 @@ function LoginPage() {
     );
 }
 
-export default LoginPage;
+export default RegisterPage;
