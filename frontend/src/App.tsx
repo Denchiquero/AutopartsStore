@@ -19,6 +19,15 @@ import OrderPage from "./pages/OrderPage";
 
 import AdminRoute from "./components/AdminRoute";
 import InventoryPage from "./pages/admin/InventoryPage";
+import AdminOrdersPage from "./pages/admin/AdminOrdersPage";
+import AdminPartsPage from "./pages/admin/AdminPartsPage";
+import AdminReferencePage from "./pages/admin/AdminReferencePage";
+import AdminFitmentsPage from "./pages/admin/AdminFitmentsPage";
+import AdminVehiclesPage
+    from "./pages/admin/AdminVehiclesPage";
+import AdminMovementsPage
+    from "./pages/admin/AdminMovementsPage";
+
 
 function App() {
 
@@ -101,6 +110,69 @@ function App() {
                         element={
                             <AdminRoute>
                                 <InventoryPage />
+                            </AdminRoute>
+                        }
+                    />
+
+                    <Route
+                        path="/admin/orders"
+                        element={
+                            <AdminRoute>
+                                <AdminOrdersPage />
+                            </AdminRoute>
+                        }
+                    />
+
+                    <Route
+                        path="/admin/parts"
+                        element={
+                            <AdminRoute>
+                                <AdminPartsPage />
+                            </AdminRoute>
+                        }
+                    />
+
+                    <Route
+                        path="/admin/reference"
+                        element={
+                            <AdminRoute>
+                                <AdminReferencePage />
+                            </AdminRoute>
+                        }
+                    />
+
+                    <Route
+                        path="/admin/reference"
+                        element={
+                            <AdminRoute>
+                                <AdminReferencePage />
+                            </AdminRoute>
+                        }
+                    />
+
+                    <Route
+                        path="/admin/fitments"
+                        element={
+                            <AdminRoute>
+                                <AdminFitmentsPage />
+                            </AdminRoute>
+                        }
+                    />
+
+                    <Route
+                        path="/admin/vehicles"
+                        element={
+                            <AdminRoute>
+                                <AdminVehiclesPage />
+                            </AdminRoute>
+                        }
+                    />
+
+                    <Route
+                        path="/admin/movements"
+                        element={
+                            <AdminRoute>
+                                <AdminMovementsPage />
                             </AdminRoute>
                         }
                     />

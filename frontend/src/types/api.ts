@@ -122,8 +122,9 @@ export interface UpdateProfileRequest {
 }
 
 export interface DecodedVin {
-    vin: string;
+    vehicleId: number | null;
 
+    vin: string;
     make: string;
     model: string;
     generation: string;
@@ -148,4 +149,98 @@ export interface Stock {
     category: string;
     price: number;
     quantity: number;
+}
+
+export interface Manufacturer {
+    id: number;
+    name: string;
+    country: string;
+    website: string;
+}
+
+export interface Category {
+    id: number;
+    name: string;
+    description: string;
+}
+
+export interface PartRequest {
+    name: string;
+    sku: string;
+    article: string;
+    description: string;
+    price: number;
+    manufacturerId: number;
+    categoryId: number;
+}
+
+export interface ManufacturerRequest {
+    name: string;
+    country: string;
+    website: string;
+}
+
+export interface CategoryRequest {
+    name: string;
+    description: string;
+}
+
+export interface VehicleApplication {
+    id: number;
+
+    make: string;
+    model: string;
+    generation: string;
+
+    yearFrom: number;
+    yearTo: number;
+
+    engineCode: string;
+    engineVolume: number;
+    power: number;
+
+    fuelType: string;
+    transmission: string;
+    driveType: string;
+    bodyType: string;
+}
+
+export interface VehicleApplicationRequest {
+    make: string;
+    model: string;
+    generation: string;
+
+    yearFrom: number;
+    yearTo: number;
+
+    engineCode: string;
+    engineVolume: number;
+    power: number;
+
+    fuelType: string;
+    transmission: string;
+    driveType: string;
+    bodyType: string;
+}
+
+export type MovementType =
+    | "RECEIPT"
+    | "WRITE_OFF"
+    | "ORDER"
+    | "RETURN";
+
+export interface InventoryMovement {
+    id: number;
+
+    partId: number;
+    sku: string;
+    partName: string;
+
+    type: MovementType;
+    quantity: number;
+
+    createdAt: string;
+
+    orderId: number | null;
+    comment: string | null;
 }

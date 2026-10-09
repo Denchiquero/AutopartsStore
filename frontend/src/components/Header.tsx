@@ -88,9 +88,35 @@ function Header() {
                 )}
 
                 {user?.role === "ADMIN" && (
-                    <Link to="/admin/inventory">
-                        Админка
-                    </Link>
+                    <>
+                        <Link to="/admin/parts">
+                            Запчасти
+                        </Link>
+
+                        <Link to="/admin/reference">
+                            Справочники
+                        </Link>
+
+                        <Link to="/admin/vehicles">
+                            Автомобили
+                        </Link>
+
+                        <Link to="/admin/fitments">
+                            Совместимость
+                        </Link>
+
+                        <Link to="/admin/inventory">
+                            Склад
+                        </Link>
+
+                        <Link to="/admin/movements">
+                            Движения
+                        </Link>
+
+                        <Link to="/admin/orders">
+                            Заказы
+                        </Link>
+                    </>
                 )}
 
             </nav>

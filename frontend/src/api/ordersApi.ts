@@ -3,6 +3,7 @@ import { api } from "./api";
 import type {
     CreateOrderRequest,
     Order,
+    OrderStatus,
     PageResponse
 } from "../types/api";
 
@@ -32,8 +33,7 @@ export async function getOrders(
                 params: {
                     page,
                     size,
-                    status:
-                        status || undefined
+                    status: status || undefined
                 }
             }
         );
@@ -48,6 +48,22 @@ export async function getOrder(
     const response =
         await api.get<Order>(
             `/orders/${id}`
+        );
+
+    return response.data;
+}
+
+export async function changeOrderStatus(
+    id: number,
+    status: OrderStatus
+): Promise<Order> {
+
+    const response =
+        await api.patch<Order>(
+            `/orders/${id}/status`,
+            {
+                status
+            }
         );
 
     return response.data;

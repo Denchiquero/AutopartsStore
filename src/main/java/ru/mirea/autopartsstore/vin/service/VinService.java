@@ -2,30 +2,26 @@ package ru.mirea.autopartsstore.vin.service;
 
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
-import ru.mirea.autopartsstore.catalog.dto.PartResponse;
-import ru.mirea.autopartsstore.catalog.repository.PartRepository;
-import ru.mirea.autopartsstore.catalog.service.PartService;
-import ru.mirea.autopartsstore.common.exception.ResourceNotFoundException;
 import ru.mirea.autopartsstore.fitment.entity.VehicleApplication;
 import ru.mirea.autopartsstore.fitment.repository.VehicleApplicationRepository;
 import ru.mirea.autopartsstore.fitment.service.FitmentService;
 import ru.mirea.autopartsstore.vin.dto.DecodedVin;
-import ru.mirea.autopartsstore.vin.dto.VinPartsResponse;
+import ru.mirea.autopartsstore.vin.dto.VinResponse;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
 
+
+@Slf4j
 @Service
 public class VinService {
 
     private final JsonNode catalog;
-//    private final PartRepository partRepository;
-//    private final PartService partService;
     private final VehicleApplicationRepository vehicleRepository;
     private final FitmentService fitmentService;
 
@@ -117,46 +113,53 @@ public class VinService {
         );
     }
 
+    public VinResponse decodeWithVehicle(
+            String vin
+    ) {
 
-    public VinPartsResponse findParts(String vin) {
+        DecodedVin decoded =
+                decode(vin);
 
-        DecodedVin decodedVin = decode(vin);
+        List<VehicleApplication> vehicles =
+                vehicleRepository
+                        .findMatchingVehicle(
+                                decoded.make(),
+                                decoded.model(),
+                                decoded.generation(),
+                                decoded.modelYear(),
+                                decoded.engineCode(),
+                                decoded.transmission(),
+                                decoded.driveType(),
+                                decoded.bodyType()
+                        );
 
-        List<VehicleApplication> matches =
-                vehicleRepository.findMatchingVehicle(
-                        decodedVin.make(),
-                        decodedVin.model(),
-                        decodedVin.generation(),
-                        decodedVin.modelYear(),
-                        decodedVin.engineCode(),
-                        decodedVin.transmission(),
-                        decodedVin.driveType(),
-                        decodedVin.bodyType()
-                );
+        Long vehicleId = null;
 
-        if (matches.isEmpty()) {
-            throw new ResourceNotFoundException(
-                    "Vehicle configuration not found in catalog"
-            );
+        if (vehicles.size() == 1) {
+            vehicleId =
+                    vehicles.getFirst().getId();
         }
 
-        if (matches.size() > 1) {
+        if (vehicles.size() > 1) {
             throw new IllegalStateException(
-                    "More than one vehicle configuration matches VIN"
+                    "Multiple vehicle configurations found"
             );
         }
 
-        VehicleApplication vehicle = matches.getFirst();
-
-        List<PartResponse> parts =
-                fitmentService.findPartsForVehicle(
-                        vehicle.getId()
-                );
-
-        return new VinPartsResponse(
-                decodedVin,
-                vehicle.getId(),
-                parts
+        return new VinResponse(
+                vehicleId,
+                decoded.vin(),
+                decoded.make(),
+                decoded.model(),
+                decoded.generation(),
+                decoded.modelYear(),
+                decoded.engineCode(),
+                decoded.engineVolume(),
+                decoded.power(),
+                decoded.fuelType(),
+                decoded.transmission(),
+                decoded.driveType(),
+                decoded.bodyType()
         );
     }
 }

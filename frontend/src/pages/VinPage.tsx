@@ -8,9 +8,12 @@ import {
 } from "react-router-dom";
 
 import {
-    decodeVin,
-    getPartsByVin
+    decodeVin
 } from "../api/vinApi";
+
+import {
+    getVehicleParts
+} from "../api/vehiclesApi";
 
 import type {
     DecodedVin,
@@ -70,30 +73,46 @@ function VinPage() {
                     normalizedVin
                 );
 
+            console.log("VIN response:", decoded);
+            console.log("vehicleId:", decoded.vehicleId);
+
             setVehicle(decoded);
 
-            /*
-             * VIN может корректно декодироваться,
-             * но в БД может не быть подходящей
-             * VehicleApplication.
-             */
+            if (decoded.vehicleId === null) {
+
+                setParts([]);
+
+                setPartsError(
+                    "Конфигурация автомобиля отсутствует в базе совместимости"
+                );
+
+                return;
+            }
+
             try {
 
                 const compatibleParts =
-                    await getPartsByVin(
-                        normalizedVin
+                    await getVehicleParts(
+                        decoded.vehicleId
                     );
 
                 setParts(
                     compatibleParts
                 );
 
+                if (compatibleParts.length === 0) {
+
+                    setPartsError(
+                        "Для этого автомобиля совместимые запчасти пока не добавлены"
+                    );
+                }
+
             } catch (error) {
 
                 console.error(error);
 
                 setPartsError(
-                    "Для этого автомобиля совместимые запчасти пока не найдены"
+                    "Не удалось загрузить совместимые запчасти"
                 );
             }
 
